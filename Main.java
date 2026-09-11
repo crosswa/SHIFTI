@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.Vector;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.ImageIcon;
 
 
 public class Main {
@@ -23,7 +22,7 @@ public class Main {
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // using no layout managers
-        frame.setLayout(null);
+        label.setBounds(0, 0, board.getIconWidth(), board.getIconHeight());
 
         // making the frame visible
         frame.setVisible(true);
