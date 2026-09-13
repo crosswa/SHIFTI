@@ -11,7 +11,7 @@ public class Board{
     JPanel boardPanel = new JPanel();
 
     JButton[][] board = new JButton[12][15];
-    int[][] Grid_Matrix = {
+    int[][] Grid_Matrix = {//1 == true, has a tile //0 == false no tile (water)
             {0,1,1,1,1,0,1,1,1,0,1,1,1,1,0},
             {0,1,1,0,1,0,1,0,1,0,1,0,1,1,0},
             {1,0,0,0,1,1,0,1,0,1,0,1,1,0,0},
