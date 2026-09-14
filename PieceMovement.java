@@ -7,7 +7,7 @@ import javax.swing.plaf.basic.BasicBorders;
 //class for character piece movement
 //controls the movement of pieces on the board, tracks the positions, 
 
-public class PieceMovement {
+public class PieceMovement extends Board {
 
     private static int players = 2; // number of players
     private static int piecesPerPlayer = 4; // number of pieces per player
