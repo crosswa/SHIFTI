@@ -6,6 +6,8 @@ import java.util.Vector;
 
 public class Main {
     public static void main(String[] args) {
-        new Board();
+        Board board = new Board();
+        PieceMovement pieces = new PieceMovement(board);
+
     }
 }
