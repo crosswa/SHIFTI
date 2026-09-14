@@ -1,14 +1,15 @@
 import javax.swing.*;
+import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import java.io.*;
 import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.*;
-import java.util.Vector;
 
 
 public class Board{
     JFrame frame = new JFrame();
-    JPanel boardPanel = new JPanel();
+    JPanel boardPanel = new JPanel(new GridBagLayout());
 
     JButton[][] board = new JButton[12][15];
     int[][] Grid_Matrix = {//1 == true, has a tile //0 == false no tile (water)
@@ -26,10 +27,6 @@ public class Board{
             {0,1,1,1,1,0,1,1,1,0,1,0,1,1,0}
     };
 
-    //JLayeredPane sliders = new JLayeredPane();
-    //JLabel rowSliders = new JLabel[4];
-    //int[] slideroffset = new int[4];
-
 
     Board() {
         frame.setResizable(false);
@@ -37,6 +34,9 @@ public class Board{
         frame.setLayout(new BorderLayout());
 
         JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
+
+        Dimension boardSize = new Dimension(1230,972);
+        background.setPreferredSize(boardSize);
 
         String[] Pngs = {
                 "/src/shifti_board.png",
@@ -55,23 +55,26 @@ public class Board{
             }
         }
 
-
-
+/*
         for(int i = 0; i < 4; i++)
         {
             JLabel sliders = new JLabel(new ImageIcon(Pngs[i]));
-            sliders.setPreferredSize(new Dimension(1180,80));
             sliders.setLayout(new GridLayout(2,15));
             sliders.add(boardPanel);
             frame.add(sliders);
             frame.pack();
         }
+ */
 
-        frame.add(background);
+        //frame.add(background);
+        //frame.pack();
+        //frame.setLocationRelativeTo(null);
 
-        frame.pack();
+        boardPanel.add(background, new GridBagConstraints());
+        frame.add(boardPanel, BorderLayout.CENTER);
 
-        frame.setLocationRelativeTo(null);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         frame.setVisible(true);
     }
 
