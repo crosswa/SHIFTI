@@ -6,6 +6,7 @@ import java.util.Vector;
 
 public class Main {
     public static void main(String[] args) {
+        int numPlayers = 4;
         new Board();
     }
 }
