@@ -6,8 +6,10 @@ import java.util.Vector;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board();
-        PieceMovement pieces = new PieceMovement(board);
-
+        new Board();
+        for(int i = 0; i < 4; i++)
+        {
+           System.out.println("player " + i);
+        }
     }
 }
