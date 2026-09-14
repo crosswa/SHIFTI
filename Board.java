@@ -27,6 +27,28 @@ public class Board{
             {0,1,1,1,1,0,1,1,1,0,1,0,1,1,0}
     };
 
+    private void ButtonClick(int row, int col){
+        ImageIcon icon = new ImageIcon("src/theseus-stand.png");
+        JLabel sprite = new JLabel(icon);
+
+        Component cell = board[row][col];
+
+
+
+        if(cell instanceof JLayeredPane){
+            JLayeredPane layeredcell = (JLayeredPane) cell;
+            layeredcell.add(sprite, JLayeredPane.DRAG_LAYER);
+            layeredcell.revalidate();
+            layeredcell.repaint();
+        }else if(cell instanceof Container){
+            ((Container) cell).add(sprite);
+            ((Container) cell).revalidate();
+            ((Container) cell).repaint();
+        }
+
+        sprite.add(board[row][col]);
+
+    }
 
     Board() {
         frame.setResizable(false);
@@ -34,6 +56,8 @@ public class Board{
         frame.setLayout(new BorderLayout());
 
         JLabel background = new JLabel(new ImageIcon("src/shifti_board (2).png"));
+
+        //JLayeredPane sprite = new JLayeredPane(new ImageIcon("src/thesus-stand"));
 
         Dimension boardSize = new Dimension(1230,972);
         background.setPreferredSize(boardSize);
@@ -52,8 +76,17 @@ public class Board{
                 board[row][col] = new JButton();
                 board[row][col].setContentAreaFilled(false);
                 background.add(board[row][col]);
+
+                final int currentRow = row;
+                final int currentCol = col;
+
+                board[row][col].addActionListener(e -> {
+                    ButtonClick(currentRow, currentCol);
+                });
+
             }
         }
+
 
 /*
         for(int i = 0; i < 4; i++)
@@ -62,8 +95,7 @@ public class Board{
             sliders.setLayout(new GridLayout(2,15));
 
         }
-
- */
+*/
 
         //frame.add(background);
         //frame.pack();

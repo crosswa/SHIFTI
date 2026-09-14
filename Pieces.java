@@ -3,7 +3,7 @@
 //class for character piece movement
 //controls the movement of pieces on the board, tracks the positions, 
 
-public class Pieces {
+public class Pieces extends Board {
     int player[]= {1,2,3,4};
     int opponent[]= {1,2,3,4};
 
@@ -15,6 +15,8 @@ public class Pieces {
 
     public void getPiecePosition(int player) {
         // code to get the position of the player's piece
+        //ButtonCLick();
+        //System.out.println("Clicked button at position: Row " + row + ", Col " + col);
     }
 
     public boolean isValidMove(int player, int x, int y) {
