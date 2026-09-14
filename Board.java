@@ -26,11 +26,6 @@ public class Board{
             {0,1,1,1,1,0,1,1,1,0,1,0,1,1,0}
     };
 
-    //JLayeredPane sliders = new JLayeredPane();
-    //JLabel rowSliders = new JLabel[4];
-    //int[] slideroffset = new int[4];
-
-
     Board() {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
