@@ -33,7 +33,7 @@ public class Board{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
+        JLabel background = new JLabel(new ImageIcon("src/shifti_board (2).png"));
 
         Dimension boardSize = new Dimension(1230,972);
         background.setPreferredSize(boardSize);
@@ -60,10 +60,9 @@ public class Board{
         {
             JLabel sliders = new JLabel(new ImageIcon(Pngs[i]));
             sliders.setLayout(new GridLayout(2,15));
-            sliders.add(boardPanel);
-            frame.add(sliders);
-            frame.pack();
+
         }
+
  */
 
         //frame.add(background);
