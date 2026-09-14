@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 public class Board{
     JFrame frame = new JFrame();
-    JPanel[][] board = new JPanel[12][15];
+    JPanel[][] board = new JPanel[12][13];
 
     int[][] Grid_Matrix = {//1 == true, has a tile //0 == false no tile (water)
             {0,1,1,1,1,0,1,1,1,0,1,1,1,1,0},
@@ -101,7 +101,7 @@ public class Board{
         mainPanel.add(turnLabel, turnText);
 
         for(int row = 0; row < 12; row++){
-            for(int col = 0; col < 15; col++){
+            for(int col = 0; col < 13; col++){
                 JPanel cell = new JPanel(new BorderLayout());
                 cell.setOpaque(false);
                 board[row][col] = cell;
@@ -122,12 +122,12 @@ public class Board{
 
 
         JLabel background = new JLabel(new ImageIcon("src/shifti_board (2).png"));
-        background.setLayout(new GridLayout(12,15));
-        Dimension boardSize = new Dimension(1230,972);
+        background.setLayout(new GridLayout(12,13));
+        Dimension boardSize = new Dimension(1060,972);
         background.setPreferredSize(boardSize);
 
         for(int row = 0; row < 12; row++){
-            for(int col = 0; col < 15; col++){
+            for(int col = 0; col < 13; col++){
                 background.add(board[row][col]);
             }
         }
@@ -150,7 +150,7 @@ public class Board{
         for(int i = 0; i < 4; i++)
         {
             JLabel sliders = new JLabel(new ImageIcon(Pngs[i]));
-            sliders.setLayout(new GridLayout(2,15));
+            sliders.setLayout(new GridLayout(2,13));
 
         }
 
