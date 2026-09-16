@@ -17,8 +17,9 @@ public class PieceMovement {
         this.pieces = new Piece[players][piecesPerPlayer];
         for (int p = 0; p < players; p++) {
             for (int i = 0; i < piecesPerPlayer; i++) {
-                int[] start = pieces[p][i].getStartPosition(p);
+                int[] start = Piece.getStartPosition(p);
                 pieces[p][i] = new Piece(p, i, start[0], start[1]);
+                pieces[p][i].winningSquare = Piece.getWinningSquare(p);
             }
         }
     }
@@ -99,7 +100,7 @@ public class PieceMovement {
 
     // resets the piece to its starting position
     public void resetPiece(int player, int pieceIndex) {
-        int[] start = pieces[player][pieceIndex].getStartPosition(player);
+        int[] start = Piece.getStartPosition(player);
         pieces[player][pieceIndex].x = start[0];
         pieces[player][pieceIndex].y = start[1];
     }
