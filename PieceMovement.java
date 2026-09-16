@@ -1,27 +1,22 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.plaf.basic.BasicBorders;
 
 //class for character piece movement
 //controls the movement of pieces on the board, tracks the positions, 
 
-public class PieceMovement extends Board {
+public class PieceMovement extends BoardInput {
 
-    private static int players = 2; // number of players
-    private static int piecesPerPlayer = 4; // number of pieces per player
+    private int players = numPLayers; // number of players
+    private int piecesPerPlayer = 4; // number of pieces per player
 
     private Piece[][] pieces = new Piece[players][piecesPerPlayer];
     private Board board;
 
-    //using getStartPosition, getDestination, and isWinningSquare as placeholders for board methods 
+    //using isWinningSquare as placeholders for board methods 
     
     public PieceMovement (Board board) {
         this.board = board;
         for (int p = 0; p < players; p++) {
             for (int i = 0; i < piecesPerPlayer; i++) {
-                int[] start = board.getStartPosition(p, i); //start position helper needs to be added in board
+                int[] start = pieces[p][i].getStartPosition();
                 pieces[p][i] = new Piece(p, i, start[0], start[1]);
             }
         }
@@ -31,14 +26,14 @@ public class PieceMovement extends Board {
     public void movePiece(int player, int pieceIndex, int steps) {
         Piece piece = pieces[player][pieceIndex];
 
-        int[] dest = board.getDestination(piece.x, piece.y, steps, player);
+        int[] dest = getDestination(piece.x, piece.y, steps, player);
 
         if (isValidMove(dest, player, pieceIndex)) {
             piece.x = dest[0];
             piece.y = dest[1];
             checkCollision(player, pieceIndex);
 
-            if (board.isWinningSquare(dest[0], dest[1], player)) {
+            if (isWinningSquare(dest[0], dest[1], player)) {
                 piece.finished = true;
                 System.out.println("Player " + player + " piece " + pieceIndex + " reached the finish!");
             }
@@ -95,9 +90,16 @@ public class PieceMovement extends Board {
     }
 
     public void resetPiece(int player, int pieceIndex) {
-        int[] start = board.getStartPosition(player, pieceIndex);
+        int[] start = pieces[player][pieceIndex].getStartPosition();
         pieces[player][pieceIndex].x = start[0];
         pieces[player][pieceIndex].y = start[1];
     }
+
+    //double check if correct
+    public boolean isWinningSquare(int row, int col, int player) {
+        // Check if the square is the winning square for the player
+        return row == pieces[player][0].winningSquare && col == pieces[player][1].winningSquare;
+    }
+
 }
 

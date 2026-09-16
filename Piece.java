@@ -4,6 +4,7 @@
 public class Piece {
     final int playerId;
     final int pieceIndex;
+    int winningSquare;
     int x, y;
     boolean finished;
 
@@ -13,5 +14,10 @@ public class Piece {
         this.x = startX;
         this.y = startY;
     
-}
+    }
+
+    public int[] getStartPosition() {
+        return new int[]{x, y};
+    }
+
 }

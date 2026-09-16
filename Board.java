@@ -1,9 +1,7 @@
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
+
 import java.io.*;
 import java.awt.*;
-import java.awt.Frame;
 import java.awt.event.*;
 
 
