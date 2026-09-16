@@ -7,9 +7,7 @@ import java.awt.event.*;
 
 public class Board{
     JFrame frame = new JFrame();
-    JPanel boardPanel = new JPanel(new GridBagLayout());
-
-    JButton[][] board = new JButton[12][15];
+    JPanel[][] board = new JPanel[12][13];
 
     int[][] Grid_Matrix = {//1 == true, has a tile //0 == false no tile (water)
             {0,1,1,1,1,0,1,1,1,0,1,1,1,1,0},
@@ -67,15 +65,11 @@ public class Board{
             }
     };
 
-
-
     private void ButtonClick(int row, int col){
         ImageIcon icon = new ImageIcon("src/player1_stand.png");
         JLabel sprite = new JLabel(icon);
 
         Component cell = board[row][col];
-
-
 
         if(cell instanceof JLayeredPane){
             JLayeredPane layeredcell = (JLayeredPane) cell;
@@ -88,7 +82,7 @@ public class Board{
             ((Container) cell).repaint();
         }
 
-        sprite.add(board[row][col]);
+        //board[row][col].add(sprite);
 
     }
 
@@ -97,12 +91,52 @@ public class Board{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        JLabel background = new JLabel(new ImageIcon("src/shifti_board (2).png"));
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        turnLabel = new JLabel("Player Turn", SwingConstants.CENTER);
+        GridBagConstraints turnText = new GridBagConstraints();
+        turnText.insets = new Insets(5,0,5,0);
 
-        background.setLayout(new GridLayout(12,15));
-        Dimension boardSize = new Dimension(1230,972);
+        mainPanel.add(turnLabel, turnText);
+
+        for(int row = 0; row < 12; row++){
+            for(int col = 0; col < 13; col++){
+                JPanel cell = new JPanel(new BorderLayout());
+                cell.setOpaque(false);
+                board[row][col] = cell;
+
+                final int currentRow = row;
+                final int currentCol = col;
+
+
+                board[row][col].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        System.out.println(currentRow + "," + currentCol);
+                        ButtonClick(currentRow, currentCol);
+                    }
+                });
+            }
+        }
+
+
+        JLabel background = new JLabel(new ImageIcon("src/shifti_board (2).png"));
+        background.setLayout(new GridLayout(12,13));
+        Dimension boardSize = new Dimension(1060,972);
         background.setPreferredSize(boardSize);
 
+        for(int row = 0; row < 12; row++){
+            for(int col = 0; col < 13; col++){
+                background.add(board[row][col]);
+            }
+        }
+
+        mainPanel.add(background);
+        mainPanel.setBackground(Color.BLACK);
+        frame.add(mainPanel);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+
+/*
         String[] Pngs = {
                 "/src/shifti_board.png",
                 "src/shifti_board_row2.png",
@@ -111,45 +145,19 @@ public class Board{
                 "src/shifti_board_row2.png"
         };
 
-
-        for(int row = 0; row < 12; row++){
-            for(int col = 0; col < 15; col++){
-                board[row][col] = new JButton();
-                board[row][col].setContentAreaFilled(false);
-                background.add(board[row][col]);
-
-
-
-                final int currentRow = row;
-                final int currentCol = col;
-
-                board[row][col].addActionListener(e -> {
-                    ButtonClick(currentRow, currentCol);
-                });
-
-            }
-        }
-
-
-/*
         for(int i = 0; i < 4; i++)
         {
             JLabel sliders = new JLabel(new ImageIcon(Pngs[i]));
-            sliders.setLayout(new GridLayout(2,15));
+            sliders.setLayout(new GridLayout(2,13));
 
         }
-*/
 
         //frame.add(background);
         //frame.pack();
         //frame.setLocationRelativeTo(null);
 
-        boardPanel.add(background, new GridBagConstraints());
-        frame.add(boardPanel, BorderLayout.CENTER);
+        */
 
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        frame.setVisible(true);
     }
 
 }
