@@ -1,5 +1,44 @@
-//each players piece
-//keeps track of their position on the board
+//piece class
+/*
+    this class holds every pieces information, including the player (playerId), which piece is where on the board (pieceIndex), 
+    their starting position (startX, startY) + winning position (winningSquare), and if that piece is able to be moved (finished)
+
+    piece index: 0-3 (4 pieces)
+
+    players (min 2, max 4):
+    player 1:
+        playerId:0
+
+        {starts in bottom left -> ends in top right}
+        startX:11
+        startY:0
+        winningSquare:[0,12]
+
+    player 2:
+        playerId:1
+
+        {starts in top right -> ends in bottom left}
+        startX:0
+        startY:12
+        winningSquare:[11,0]
+
+    player 3:
+        playerId:2
+
+        {starts in bottom right -> ends in top left}
+        startX:11
+        startY:12
+        winningSquare:[0,0]
+
+    player 4:
+        playerId:3
+
+        {starts in top left -> ends in bottom right}
+        startX:0
+        startY:0
+        winningSquare:[11,12]
+
+*/
 
 public class Piece {
     final int playerId;
@@ -9,6 +48,7 @@ public class Piece {
     int x, y;
     boolean finished;
 
+    //each piece is built here
     Piece(int playerId, int pieceIndex, int startX, int startY) {
         this.playerId = playerId;
         this.pieceIndex = pieceIndex;
@@ -21,10 +61,12 @@ public class Piece {
     
     }
 
+    //helper to return the starting position
     public int[] getStartPosition() {
         return new int[]{startX, startY};
     }
 
+    //may be adjusted with the boards coordinates
     public int[] getWinningSquare(int playerId) {
         switch(playerId){
             case 0: //player 1 starts at bottom left -> winning square is top right

@@ -1,36 +1,41 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
-//class for handling user input on the board with button clicks
+//class for handling user input on the board with button/mouse clicks
+//pulls the grids "coordinates" to track for the piece movement
+
 public class BoardInput {
     
     private final Board board;
-    private int selectedRow = -1;
-    private int selectedCol = -1;
-    private boolean squareSelected = false;
+    private int selectedRow;
+    private int selectedCol;
+    private boolean squareSelected= false;
 
+    //constructor
     public BoardInput(Board board) {
         this.board = board;
     }
 
-
+    //button click function, called when a grid square is clicked
     protected void ButtonClick(int row, int col) {
         selectSquare(row, col);
         board.ButtonClick(row, col);   
     }
 
-    // call this from ButtonClick when the player is picking a destination
+    //this is called within the button click function to grab which square has been clicked
     public void selectSquare(int row, int col) {
         selectedRow = row;
         selectedCol = col;
         squareSelected = true;
     }
 
+    //helper for returning selected square
     public int[] getSelectedSquare() {
         if (!squareSelected) return null;
         return new int[]{selectedRow, selectedCol};
     }
 
+    //clears the selected square
     public void clearSelection() {
         squareSelected = false;
         selectedRow = -1;
@@ -38,6 +43,8 @@ public class BoardInput {
     }
 
     // BFS shortest walkable-path distance between two grid cells
+    // if the player clicks on a square, this function will find the distance to that square
+    // used for the move piece function in piece movement
     public int getPathDistance(int startRow, int startCol, int destRow, int destCol) {
         int rows = board.Grid_Matrix.length;
         int cols = board.Grid_Matrix[0].length;
@@ -66,7 +73,8 @@ public class BoardInput {
         return -1; // unreachable
     }
 
-     public int[] getDestination(int startX, int startY, int steps, int player) {
+    //helper for returning the destination square, called for piece movement
+    public int[] getDestination(int startX, int startY, int steps, int player) {
         int[] selected = getSelectedSquare();
         if (selected == null) {
             return null; // player hasn't clicked a square yet
