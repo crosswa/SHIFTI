@@ -58,9 +58,9 @@ public class PieceMovement {
     public boolean isValidMove(int[] dest, int player, int pieceIndex) {
         Piece piece = pieces[player][pieceIndex];
 
-        //checks to make sure if the piece isn't already at the winning square
-        if (piece.finished) {
-            System.out.println("That piece has already finished and can't be moved.");
+        //checks to make sure if the piece isn't already at the winning square or is on water.
+        if (piece.finished || board.Grid_Matrix[piece.x][piece.y] == 0) {
+            System.out.println("That piece can't be moved.");
             return false;
         }
 
