@@ -61,21 +61,34 @@ public class Piece {
     
     }
 
-    //helper to return the starting position
-    public int[] getStartPosition() {
-        return new int[]{startX, startY};
+    //- two helpers below may be adjusted with the correct boards coordinates if needed -
+
+    //finds start position for each player
+    public int[] getStartPosition(int playerId) {
+         switch(playerId){
+            case 0: //player 1 starts at bottom left
+            return new int[]{11,0};
+            case 1: //player 2 starts at top right
+            return new int[]{0,12};
+            case 2: //player 3 starts at bottom right
+            return new int[]{11,12};
+            case 3: //player 4 starts at top left
+            return new int[]{0,0};
+            default:
+            return new int[]{-1,-1}; //invalid player
+        }
     }
 
-    //may be adjusted with the boards coordinates
+    //finds winning position for each player
     public int[] getWinningSquare(int playerId) {
         switch(playerId){
-            case 0: //player 1 starts at bottom left -> winning square is top right
+            case 0: //bottom left -> winning square is top right
             return new int[]{0,12};
-            case 1: //player 2 starts at top right -> winning square is bottom left
+            case 1: //top right -> winning square is bottom left
             return new int[]{11,0};
-            case 2: //player 3 starts at bottom right -> winning square is top left
+            case 2: //bottom right -> winning square is top left
             return new int[]{0,0};
-            case 3: //player 4 starts at top left -> winning square is bottom right
+            case 3: //top left -> winning square is bottom right
             return new int[]{11,12};
             default:
             return new int[]{-1,-1}; //invalid player

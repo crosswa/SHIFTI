@@ -5,17 +5,19 @@ public class PieceMovement {
 
     private Board board;
 
-    private int players = board.numPLayers; // number of players
+    private int players; // number of players
     private static int piecesPerPlayer = 4; // static since every player always has 4 pieces
 
-    private Piece[][] pieces = new Piece[players][piecesPerPlayer];
+    private Piece[][] pieces;
 
     //constructor, uses piece class to build each piece for the player
     public PieceMovement (Board board) {
         this.board = board;
+        this.players = board.numPLayers;
+        this.pieces = new Piece[players][piecesPerPlayer];
         for (int p = 0; p < players; p++) {
             for (int i = 0; i < piecesPerPlayer; i++) {
-                int[] start = pieces[p][i].getStartPosition();
+                int[] start = pieces[p][i].getStartPosition(p);
                 pieces[p][i] = new Piece(p, i, start[0], start[1]);
             }
         }
@@ -97,7 +99,7 @@ public class PieceMovement {
 
     // resets the piece to its starting position
     public void resetPiece(int player, int pieceIndex) {
-        int[] start = pieces[player][pieceIndex].getStartPosition();
+        int[] start = pieces[player][pieceIndex].getStartPosition(player);
         pieces[player][pieceIndex].x = start[0];
         pieces[player][pieceIndex].y = start[1];
     }
