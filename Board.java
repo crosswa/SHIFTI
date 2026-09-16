@@ -65,7 +65,7 @@ public class Board{
             }
     };
 
-    private void ButtonClick(int row, int col){
+    protected void ButtonClick(int row, int col){
         ImageIcon icon = new ImageIcon("src/player1_stand.png");
         JLabel sprite = new JLabel(icon);
 

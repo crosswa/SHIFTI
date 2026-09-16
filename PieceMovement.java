@@ -2,16 +2,17 @@
 //class for character piece movement
 //controls the movement of pieces on the board, tracks the positions, 
 
-public class PieceMovement extends BoardInput {
+public class PieceMovement {
 
-    private int players = numPLayers; // number of players
+    private Board board;
+
+    private int players = board.numPLayers; // number of players
     private int piecesPerPlayer = 4; // number of pieces per player
 
     private Piece[][] pieces = new Piece[players][piecesPerPlayer];
-    private Board board;
 
-    //using isWinningSquare as placeholders for board methods 
-    
+    //using isWinningSquare as placeholders for board methods
+
     public PieceMovement (Board board) {
         this.board = board;
         for (int p = 0; p < players; p++) {
@@ -23,10 +24,10 @@ public class PieceMovement extends BoardInput {
     }
 
     //steps= number the dice rolled
-    public void movePiece(int player, int pieceIndex, int steps) {
+    public void movePiece(int player, int pieceIndex, int steps, BoardInput boardInput) {
         Piece piece = pieces[player][pieceIndex];
 
-        int[] dest = getDestination(piece.x, piece.y, steps, player);
+        int[] dest = boardInput.getDestination(piece.x, piece.y, steps, player);
 
         if (isValidMove(dest, player, pieceIndex)) {
             piece.x = dest[0];
@@ -98,7 +99,7 @@ public class PieceMovement extends BoardInput {
     //double check if correct
     public boolean isWinningSquare(int row, int col, int player) {
         // Check if the square is the winning square for the player
-        return row == pieces[player][0].winningSquare && col == pieces[player][1].winningSquare;
+        return row == pieces[player][0].winningSquare[0] && col == pieces[player][0].winningSquare[1];
     }
 
 }

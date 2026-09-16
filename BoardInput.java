@@ -2,15 +2,22 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 //class for handling user input on the board with button clicks
-public class BoardInput extends Board {
-    // add these fields near your other selection fields
+public class BoardInput {
+    
+    private final Board board;
     private int selectedRow = -1;
     private int selectedCol = -1;
     private boolean squareSelected = false;
 
-    // public BoardInput(Board board) {
-    //     BoardInput boardInput = this.board;
-    // }
+    public BoardInput(Board board) {
+        this.board = board;
+    }
+
+
+    protected void ButtonClick(int row, int col) {
+        selectSquare(row, col);
+        board.ButtonClick(row, col);   
+    }
 
     // call this from ButtonClick when the player is picking a destination
     public void selectSquare(int row, int col) {
@@ -32,8 +39,8 @@ public class BoardInput extends Board {
 
     // BFS shortest walkable-path distance between two grid cells
     public int getPathDistance(int startRow, int startCol, int destRow, int destCol) {
-        int rows = Grid_Matrix.length;
-        int cols = Grid_Matrix[0].length;
+        int rows = board.Grid_Matrix.length;
+        int cols = board.Grid_Matrix[0].length;
         boolean[][] visited = new boolean[rows][cols];
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{startRow, startCol, 0});
@@ -50,7 +57,7 @@ public class BoardInput extends Board {
                 int nr = current[0] + d[0];
                 int nc = current[1] + d[1];
                 if (nr >= 0 && nr < rows && nc >= 0 && nc < cols
-                    && !visited[nr][nc] && Grid_Matrix[nr][nc] == 1) {
+                    && !visited[nr][nc] && board.Grid_Matrix[nr][nc] == 1) {
                     visited[nr][nc] = true;
                     queue.add(new int[]{nr, nc, current[2] + 1});
                 }
