@@ -65,7 +65,7 @@ public class Board{
             }
     };
 
-    protected void ButtonClick(int row, int col){
+    protected void buttonClick(int row, int col){
         ImageIcon icon = new ImageIcon("src/player1_stand.png");
         JLabel sprite = new JLabel(icon);
 
@@ -84,8 +84,111 @@ public class Board{
 
     }
 
-    private void boardshift(int row , int col){
+    public JPanel boardShift(JPanel mainPanel){
+        JPanel buttonPanel = new JPanel();
+        JPanel R_buttonPanel = new JPanel();
 
+        buttonPanel.setLayout(null);
+        R_buttonPanel.setLayout(null);
+
+        buttonPanel.setBackground(Color.BLACK);
+        R_buttonPanel.setBackground(Color.BLACK);
+
+        buttonPanel.setPreferredSize(new Dimension(114,972));
+        R_buttonPanel.setPreferredSize(new Dimension(114,972));
+
+        ImageIcon arrowR = new ImageIcon("src/arrow.png");
+        ImageIcon arrowL = new ImageIcon("src/arrow left.png");
+
+        JButton L_arrow1 = new JButton(arrowL);
+        //L_arrow1.setBounds(0,100,114,80);
+
+        JButton L_arrow2 = new JButton(arrowL);
+
+        JButton L_arrow3 = new JButton(arrowL);
+
+        JButton L_arrow4 = new JButton(arrowL);
+
+        JButton R_arrow1 =  new JButton(arrowR);
+        R_arrow1.setBounds(0,200,114,80);
+
+        JButton R_arrow2 =  new JButton(arrowR);
+        R_arrow2.setBounds(0,360,114,80);
+
+        JButton R_arrow3 =  new JButton(arrowR);
+        R_arrow3.setBounds(0,520,114,80);
+
+        JButton R_arrow4 =  new JButton(arrowR);
+        R_arrow4.setBounds(0,685,114,80);
+
+        //shifting left
+        /*
+        R_arrow1.addActionListener(e -> row1shift = -1);
+
+        R_arrow2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row2shift = -1;
+            }
+        });
+
+        R_arrow3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row3shift = -1;
+            }
+        });
+
+        R_arrow1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row4shift = -1;
+            }
+        });
+
+        //shifting right
+
+        L_arrow1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row1shift = 1;
+            }
+        });
+
+        L_arrow2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row2shift = 1;
+            }
+        });
+
+        L_arrow3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row3shift = 1;
+            }
+        });
+
+        L_arrow1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row4shift = 1;
+            }
+        });
+
+         */
+        buttonPanel.add(L_arrow1);
+        buttonPanel.add(L_arrow2);
+        buttonPanel.add(L_arrow3);
+        buttonPanel.add(L_arrow4);
+        buttonPanel.add(R_arrow1);
+        buttonPanel.add(R_arrow2);
+        buttonPanel.add(R_arrow3);
+        buttonPanel.add(R_arrow4);
+
+        mainPanel.add(buttonPanel);
+
+        return mainPanel;
     }
 
     Board() {
@@ -98,7 +201,7 @@ public class Board{
         GridBagConstraints turnText = new GridBagConstraints();
         turnText.insets = new Insets(0,0,0,0);
 
-        mainPanel.add(turnLabel, turnText);
+       // mainPanel.add(turnLabel, turnText);
 
         //make board cells
 
@@ -134,7 +237,17 @@ public class Board{
 
         int cellWidth = 1060/13;
         int cellHeight = 972/12;
-        int rowShift = 0;
+
+        /*
+        row shift value is updated by the board shift class
+         */
+
+        //rowshift will be between -2 and -1 and 0 // -1 being the starting offset
+        //int offset = 0;
+        int row1Shift = 0; // + BoardShift();
+        int row2Shift = 0; // + BoardShift();
+        int row3Shift = 0; // + BoardShift();
+        int row4Shift = 0; // + BoardShift();
 
         for(int row = 0; row < 12; row++){
             for(int col = 0; col < 13; col++){
@@ -154,11 +267,26 @@ public class Board{
         {
             int row = i+1;
             JLabel sliders = new JLabel(new ImageIcon(Pngs[i]));
-            sliders.setBounds(rowShift,(row * 162),1060, 162);
+            if(i == 0){
+                sliders.setBounds((row1Shift * cellWidth) -1,(row * 162),1230, 162);
+            }
+            else if(i == 1){
+                sliders.setBounds((row2Shift * cellWidth) -1,(row * 162),1230, 162);
+            }
+            else if(i == 2){
+                sliders.setBounds((row3Shift * cellWidth) -1,(row * 162),1230, 162);
+            }
+            else{
+                sliders.setBounds((row4Shift *cellWidth) -1,(row * 162),1230, 162);
+            }
+
+            //sliders.setBounds(rowShift,(row * 162),1060, 162);
             backgroundLayer.add(sliders,JLayeredPane.PALETTE_LAYER);
 
         }
-        //mainPanel.add(background);
+
+        boardShift(mainPanel);
+
         mainPanel.add(backgroundLayer);
         mainPanel.setBackground(Color.BLACK);
         frame.add(mainPanel);
