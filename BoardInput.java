@@ -17,9 +17,9 @@ public class BoardInput {
     }
 
     //button click function, called when a grid square is clicked
-    protected void buttonClick(int row, int col) {
+    protected void ButtonClick(int row, int col) {
         selectSquare(row, col);
-        board.buttonClick(row, col);
+        board.buttonClick(row, col);   
     }
 
     //this is called within the button click function to grab which square has been clicked

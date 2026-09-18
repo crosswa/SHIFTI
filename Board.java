@@ -1,6 +1,5 @@
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -84,7 +83,8 @@ public class Board{
 
     }
 
-    public JPanel boardShift(JPanel mainPanel){
+    //public JPanel boardShift(JPanel mainPanel){
+    public JPanel boardShift(){
         JPanel buttonPanel = new JPanel();
         JPanel R_buttonPanel = new JPanel();
 
@@ -177,6 +177,19 @@ public class Board{
         });
 
          */
+
+        // buttonPanel.add(L_arrow1);
+        // buttonPanel.add(L_arrow2);
+        // buttonPanel.add(L_arrow3);
+        // buttonPanel.add(L_arrow4);
+        // buttonPanel.add(R_arrow1);
+        // buttonPanel.add(R_arrow2);
+        // buttonPanel.add(R_arrow3);
+        // buttonPanel.add(R_arrow4);
+
+        // mainPanel.add(buttonPanel);
+
+        // return mainPanel;
         buttonPanel.add(L_arrow1);
         buttonPanel.add(L_arrow2);
         buttonPanel.add(L_arrow3);
@@ -186,9 +199,7 @@ public class Board{
         buttonPanel.add(R_arrow3);
         buttonPanel.add(R_arrow4);
 
-        mainPanel.add(buttonPanel);
-
-        return mainPanel;
+        return buttonPanel;
     }
 
     Board() {
@@ -196,7 +207,8 @@ public class Board{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        JPanel mainPanel = new JPanel(new GridBagLayout());
+        // JPanel mainPanel = new JPanel(new GridBagLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
         turnLabel = new JLabel("Player Turn", SwingConstants.CENTER);
         GridBagConstraints turnText = new GridBagConstraints();
         turnText.insets = new Insets(0,0,0,0);
@@ -225,19 +237,35 @@ public class Board{
             }
         }
 
+        // Dimension boardSize = new Dimension(1060,972);
+        // JLayeredPane backgroundLayer = new JLayeredPane();
+        // backgroundLayer.setPreferredSize(new Dimension(boardSize));
+
+
+        // JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
+        // background.setBounds(0,0,1060,972);
+        // backgroundLayer.add(background,JLayeredPane.DEFAULT_LAYER);
+
+        // int cellWidth = 1060/13;
+        // int cellHeight = 972/12;
+
         //layed backround
-        Dimension boardSize = new Dimension(1060,972);
+        ImageIcon boardIcon = new ImageIcon("src/shifti_board.png");
+        int boardWidth = boardIcon.getIconWidth();
+        int boardHeight = boardIcon.getIconHeight();
+        System.out.println("boardWidth=" + boardWidth + " boardHeight=" + boardHeight);
+
+        Dimension boardSize = new Dimension(boardWidth, boardHeight);
         JLayeredPane backgroundLayer = new JLayeredPane();
-        backgroundLayer.setPreferredSize(new Dimension(boardSize));
+        backgroundLayer.setPreferredSize(boardSize);
 
+        JLabel background = new JLabel(boardIcon);
+        background.setBounds(0, 0, boardWidth, boardHeight);
+        backgroundLayer.add(background, JLayeredPane.DEFAULT_LAYER);
+        System.out.println("background bounds=" + background.getBounds());
 
-        JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
-        background.setBounds(0,0,1060,972);
-        backgroundLayer.add(background,JLayeredPane.DEFAULT_LAYER);
-
-        int cellWidth = 1060/13;
-        int cellHeight = 972/12;
-
+        int cellWidth = boardWidth / 13;
+        int cellHeight = boardHeight / 12;
         /*
         row shift value is updated by the board shift class
          */
@@ -285,10 +313,15 @@ public class Board{
 
         }
 
-        boardShift(mainPanel);
+        // boardShift(mainPanel);
 
-        mainPanel.add(backgroundLayer);
+        // mainPanel.add(backgroundLayer);
+        // mainPanel.setBackground(Color.BLACK);
+        JPanel buttonPanel = boardShift();
+        mainPanel.add(buttonPanel, BorderLayout.WEST);
+        mainPanel.add(backgroundLayer, BorderLayout.CENTER);
         mainPanel.setBackground(Color.BLACK);
+
         frame.add(mainPanel);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
