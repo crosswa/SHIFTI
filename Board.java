@@ -60,11 +60,17 @@ public class Board{
             {
                 "src/player4_stand.png",
                 "src/player4_sword.png",
-                "src/pkayer4_sword.png"
+                "src/player4_sword.png"
             }
-    };
+        };
 
-    protected void buttonClick(int row, int col){
+        private BoardInput boardInput;
+
+        public void setBoardInput(BoardInput boardInput) {
+            this.boardInput = boardInput;
+}
+    
+        protected void buttonClick(int row, int col){
         ImageIcon icon = new ImageIcon("src/player1_stand.png");
         JLabel sprite = new JLabel(icon);
 
@@ -81,8 +87,8 @@ public class Board{
             ((Container) cell).repaint();
         }
 
-    }
-
+    }  
+    
     //public JPanel boardShift(JPanel mainPanel){
     public JPanel boardShift(){
         JPanel buttonPanel = new JPanel();
@@ -232,40 +238,29 @@ public class Board{
                     public void mouseClicked(MouseEvent e) {
                         System.out.println(currentRow + "," + currentCol);
                         buttonClick(currentRow, currentCol);
+                        if (boardInput != null) {
+                        boardInput.ButtonClick(currentRow, currentCol);
+        }
                     }
                 });
             }
         }
 
-        // Dimension boardSize = new Dimension(1060,972);
-        // JLayeredPane backgroundLayer = new JLayeredPane();
-        // backgroundLayer.setPreferredSize(new Dimension(boardSize));
-
-
-        // JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
-        // background.setBounds(0,0,1060,972);
-        // backgroundLayer.add(background,JLayeredPane.DEFAULT_LAYER);
-
-        // int cellWidth = 1060/13;
-        // int cellHeight = 972/12;
+        
 
         //layed backround
-        ImageIcon boardIcon = new ImageIcon("src/shifti_board.png");
-        int boardWidth = boardIcon.getIconWidth();
-        int boardHeight = boardIcon.getIconHeight();
-        System.out.println("boardWidth=" + boardWidth + " boardHeight=" + boardHeight);
 
-        Dimension boardSize = new Dimension(boardWidth, boardHeight);
+        Dimension boardSize = new Dimension(1060,972);
         JLayeredPane backgroundLayer = new JLayeredPane();
-        backgroundLayer.setPreferredSize(boardSize);
+        backgroundLayer.setPreferredSize(new Dimension(boardSize));
 
-        JLabel background = new JLabel(boardIcon);
-        background.setBounds(0, 0, boardWidth, boardHeight);
-        backgroundLayer.add(background, JLayeredPane.DEFAULT_LAYER);
-        System.out.println("background bounds=" + background.getBounds());
 
-        int cellWidth = boardWidth / 13;
-        int cellHeight = boardHeight / 12;
+        JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
+        background.setBounds(0,0,1060,972);
+        backgroundLayer.add(background,JLayeredPane.DEFAULT_LAYER);
+
+        int cellWidth = 1060/13;
+        int cellHeight = 972/12;
         /*
         row shift value is updated by the board shift class
          */
@@ -322,13 +317,13 @@ public class Board{
         mainPanel.add(backgroundLayer, BorderLayout.CENTER);
         mainPanel.setBackground(Color.BLACK);
 
-        frame.add(mainPanel);
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setBorder(null);
+        frame.add(scrollPane);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
-
-
-
     }
+    
 
 }
 
