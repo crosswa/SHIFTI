@@ -44,44 +44,82 @@ public class Board{
     String[][] SpriteIcons = {
             {
                     "src/src/player1_stand.png",
-                    "src/src/player1_sword.png",
-                    "src/src/player1_swing.png"
-            },
-            {
                     "src/src/player2_stand.png",
-                    "src/src/player2_sword.png",
-                    "src/src/player2_swing.png"
-            },
-            {
                     "src/src/player3_stand.png",
-                    "src/src/player3_sword.png",
-                    "src/src/player3_swing.png"
+                    "src/src/player4_stand.png",
             },
             {
-                    "src/src/player4_stand.png",
+                    "src/src/player1_sword.png",
+                    "src/src/player2_sword.png",
+                    "src/src/player3_sword.png",
                     "src/src/player4_sword.png",
-                    "src/src/pkayer4_sword.png"
-            }
+            },
+            {
+                    "src/src/player1_swing.png",
+                    "src/src/player2_swing.png",
+                    "src/src/player3_sword.png",
+                    "src/src/player4_swing.png"
+            },
     };
 
     protected void buttonClick(int row, int col){
-        ImageIcon icon = new ImageIcon("src/src/player1_stand.png");
-        JLabel sprite = new JLabel(icon);
 
-        Component cell = board[row][col];
+        if( selectedSprite == null){
+            for(int i = 0; i < spriteNumber; i++){
+                if(sprites[currentplayer][i] == null){
+                    ImageIcon icon = new ImageIcon("src/src/player1_stand.png");
+                    JLabel sprite = new JLabel(icon);
+                    Component cell = board[row][col];
 
-        if(cell instanceof JLayeredPane){
-            JLayeredPane layeredcell = (JLayeredPane) cell;
-            layeredcell.add(sprite, JLayeredPane.DRAG_LAYER);
-            layeredcell.revalidate();
-            layeredcell.repaint();
-        }else if(cell instanceof Container){
-            ((Container) cell).add(sprite);
-            ((Container) cell).revalidate();
-            ((Container) cell).repaint();
+
+                    if(cell instanceof JLayeredPane){
+                        JLayeredPane layeredcell = (JLayeredPane) cell;
+                        layeredcell.add(sprite, JLayeredPane.DRAG_LAYER);
+                        layeredcell.revalidate();
+                        layeredcell.repaint();
+                    }else if(cell instanceof Container){
+                        ((Container) cell).add(sprite);
+                        ((Container) cell).revalidate();
+                        ((Container) cell).repaint();
+                    }
+
+                    sprites[currentplayer][i] = sprite;
+                    spriteRow[currentplayer][i] = row;
+                    spriteCol[currentplayer][i] = col;
+
+                    selectedSprite = sprite;
+                    selectedPlayer = currentplayer;
+                    spriteIndex = i;
+
+                    break;
+                }
+            }
         }
+        else{
+            int oldRow = spriteRow[selectedPlayer][spriteIndex];
+            int oldCol = spriteCol[selectedPlayer][spriteIndex];
 
+            Component oldCell = board[oldRow][oldCol];
+
+            if(oldCell instanceof Container){
+                Container container = (Container) oldCell;
+
+                container.remove(selectedSprite);
+                container.revalidate();
+                container.repaint();
+            }
+
+            sprites[selectedPlayer][spriteIndex] = null;
+            spriteRow[selectedPlayer][spriteIndex] = -1;
+            spriteCol[selectedPlayer][spriteIndex] = -1;
+
+            selectedSprite = null;
+            selectedPlayer = -1;
+            spriteIndex = -1;
+        }
     }
+
+
 
     public Component boardShift(JPanel mainPanel){
         JPanel buttonPanel = new JPanel();

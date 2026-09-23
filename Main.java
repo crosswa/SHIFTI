@@ -28,10 +28,10 @@ public class Main {
     public static void main(String[] args) {
         board = new Board();
         boardInput = new BoardInput(board);
-        board.setBoardInput(boardInput);
+        //board.setBoardInput(boardInput);
         //start();
     }
-
+/*
     public static void start(){
         movement = new PieceMovement(board);
         int currentPlayer = 0;
@@ -89,4 +89,6 @@ public class Main {
             }
         }
     }
+
+ */
 }
