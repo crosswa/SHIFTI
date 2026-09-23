@@ -43,19 +43,19 @@ public class Board{
 
     String[][] SpriteIcons = {
             {
-                    "src/src/player1_stand.png",
-                    "src/src/player1_sword.png",
-                    "src/src/player1_swing.png"
+                    "src/player1_stand.png",
+                    "src/player1_sword.png",
+                    "src/player1_swing.png"
             },
             {
-                    "src/src/player2_stand.png",
-                    "src/src/player2_sword.png",
-                    "src/src/player2_swing.png"
+                    "src/player2_stand.png",
+                    "src/player2_sword.png",
+                    "src/player2_swing.png"
             },
             {
-                    "src/src/player3_stand.png",
-                    "src/src/player3_sword.png",
-                    "src/src/player3_swing.png"
+                    "src/player3_stand.png",
+                    "src/player3_sword.png",
+                    "src/player3_swing.png"
             },
             {
                 "src/player4_stand.png",
@@ -64,8 +64,15 @@ public class Board{
             }
     };
 
+    private BoardInput boardInput;
+
+    public void setBoardInput(BoardInput boardInput) {
+        this.boardInput = boardInput;
+    }
+
+
     protected void buttonClick(int row, int col){
-        ImageIcon icon = new ImageIcon("src/src/player1_stand.png");
+        ImageIcon icon = new ImageIcon("src/player1_stand.png");
         JLabel sprite = new JLabel(icon);
 
         Component cell = board[row][col];
@@ -96,8 +103,8 @@ public class Board{
         buttonPanel.setPreferredSize(new Dimension(114,972));
         R_buttonPanel.setPreferredSize(new Dimension(114,972));
 
-        ImageIcon arrowR = new ImageIcon("src/src/arrow.png");
-        ImageIcon arrowL = new ImageIcon("src/src/arrow left.png");
+        ImageIcon arrowR = new ImageIcon("src/arrow.png");
+        ImageIcon arrowL = new ImageIcon("src/arrow left.png");
 
         JButton L_arrow1 = new JButton(arrowL);
         //L_arrow1.setBounds(0,200,114,80);
@@ -219,9 +226,10 @@ public class Board{
                     public void mouseClicked(MouseEvent e) {
                         System.out.println(currentRow + "," + currentCol);
                         buttonClick(currentRow, currentCol);
-                        if (boardInput != null) {
-                        boardInput.ButtonClick(currentRow, currentCol);
-        }
+                        if(boardInput != null){
+                            boardInput.ButtonClick(currentRow, currentCol);
+                        }
+
                     }
                 });
             }
@@ -233,7 +241,7 @@ public class Board{
         backgroundLayer.setPreferredSize(new Dimension(boardSize));
 
 
-        JLabel background = new JLabel(new ImageIcon("src/src/shifti_board.png"));
+        JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
         background.setBounds(0,0,1060,972);
 
         backgroundLayer.add(background,JLayeredPane.DEFAULT_LAYER);
@@ -262,10 +270,10 @@ public class Board{
         }
 
         String[] Pngs = {
-                "src/src/shifti_board_row2.png",
-                "src/src/shifti_board_row3.png",
-                "src/src/shifti_board_row4.png",
-                "src/src/shifti_board_row5.png"
+                "src/shifti_board_row2.png",
+                "src/shifti_board_row3.png",
+                "src/shifti_board_row4.png",
+                "src/shifti_board_row5.png"
         };
 
         for(int i = 0; i < 4; i++)
