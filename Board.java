@@ -43,35 +43,29 @@ public class Board{
 
     String[][] SpriteIcons = {
             {
-                "src/player1_stand.png",
-                "src/player1_sword.png",
-                "src/player1_swing.png"
+                    "src/src/player1_stand.png",
+                    "src/src/player1_sword.png",
+                    "src/src/player1_swing.png"
             },
             {
-                "src/player2_stand.png",
-                "src/player2_sword.png",
-                "src/player2_swing.png"
+                    "src/src/player2_stand.png",
+                    "src/src/player2_sword.png",
+                    "src/src/player2_swing.png"
             },
             {
-                "src/player3_stand.png",
-                "src/player3_sword.png",
-                "src/player3_swing.png"
+                    "src/src/player3_stand.png",
+                    "src/src/player3_sword.png",
+                    "src/src/player3_swing.png"
             },
             {
                 "src/player4_stand.png",
                 "src/player4_sword.png",
                 "src/player4_sword.png"
             }
-        };
+    };
 
-        private BoardInput boardInput;
-
-        public void setBoardInput(BoardInput boardInput) {
-            this.boardInput = boardInput;
-}
-    
-        protected void buttonClick(int row, int col){
-        ImageIcon icon = new ImageIcon("src/player1_stand.png");
+    protected void buttonClick(int row, int col){
+        ImageIcon icon = new ImageIcon("src/src/player1_stand.png");
         JLabel sprite = new JLabel(icon);
 
         Component cell = board[row][col];
@@ -87,10 +81,9 @@ public class Board{
             ((Container) cell).repaint();
         }
 
-    }  
-    
-    //public JPanel boardShift(JPanel mainPanel){
-    public JPanel boardShift(){
+    }
+
+    public Component boardShift(JPanel mainPanel){
         JPanel buttonPanel = new JPanel();
         JPanel R_buttonPanel = new JPanel();
 
@@ -103,11 +96,11 @@ public class Board{
         buttonPanel.setPreferredSize(new Dimension(114,972));
         R_buttonPanel.setPreferredSize(new Dimension(114,972));
 
-        ImageIcon arrowR = new ImageIcon("src/arrow.png");
-        ImageIcon arrowL = new ImageIcon("src/arrow left.png");
+        ImageIcon arrowR = new ImageIcon("src/src/arrow.png");
+        ImageIcon arrowL = new ImageIcon("src/src/arrow left.png");
 
         JButton L_arrow1 = new JButton(arrowL);
-        //L_arrow1.setBounds(0,100,114,80);
+        //L_arrow1.setBounds(0,200,114,80);
 
         JButton L_arrow2 = new JButton(arrowL);
 
@@ -184,18 +177,6 @@ public class Board{
 
          */
 
-        // buttonPanel.add(L_arrow1);
-        // buttonPanel.add(L_arrow2);
-        // buttonPanel.add(L_arrow3);
-        // buttonPanel.add(L_arrow4);
-        // buttonPanel.add(R_arrow1);
-        // buttonPanel.add(R_arrow2);
-        // buttonPanel.add(R_arrow3);
-        // buttonPanel.add(R_arrow4);
-
-        // mainPanel.add(buttonPanel);
-
-        // return mainPanel;
         buttonPanel.add(L_arrow1);
         buttonPanel.add(L_arrow2);
         buttonPanel.add(L_arrow3);
@@ -205,7 +186,7 @@ public class Board{
         buttonPanel.add(R_arrow3);
         buttonPanel.add(R_arrow4);
 
-        return buttonPanel;
+        return mainPanel.add(buttonPanel);
     }
 
     Board() {
@@ -213,13 +194,13 @@ public class Board{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        // JPanel mainPanel = new JPanel(new GridBagLayout());
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        //JPanel mainPanel = new JPanel(new BorderLayout());
         turnLabel = new JLabel("Player Turn", SwingConstants.CENTER);
         GridBagConstraints turnText = new GridBagConstraints();
         turnText.insets = new Insets(0,0,0,0);
 
-       // mainPanel.add(turnLabel, turnText);
+        // mainPanel.add(turnLabel, turnText);
 
         //make board cells
 
@@ -245,32 +226,33 @@ public class Board{
                 });
             }
         }
-
-        
-
-        //layed backround
+        //layered background
 
         Dimension boardSize = new Dimension(1060,972);
         JLayeredPane backgroundLayer = new JLayeredPane();
         backgroundLayer.setPreferredSize(new Dimension(boardSize));
 
 
-        JLabel background = new JLabel(new ImageIcon("src/shifti_board.png"));
+        JLabel background = new JLabel(new ImageIcon("src/src/shifti_board.png"));
         background.setBounds(0,0,1060,972);
+
         backgroundLayer.add(background,JLayeredPane.DEFAULT_LAYER);
 
-        int cellWidth = 1060/13;
-        int cellHeight = 972/12;
+
         /*
         row shift value is updated by the board shift class
          */
 
+
+        int cellWidth = 1060/13;
+        int cellHeight = 972/12;
+
         //rowshift will be between -2 and -1 and 0 // -1 being the starting offset
         //int offset = 0;
-        int row1Shift = 0; // + BoardShift();
-        int row2Shift = 0; // + BoardShift();
-        int row3Shift = 0; // + BoardShift();
-        int row4Shift = 0; // + BoardShift();
+        int row1Shift = -1; // + BoardShift();
+        int row2Shift = -1; // + BoardShift();
+        int row3Shift = -1; // + BoardShift();
+        int row4Shift = -1; // + BoardShift();
 
         for(int row = 0; row < 12; row++){
             for(int col = 0; col < 13; col++){
@@ -280,10 +262,10 @@ public class Board{
         }
 
         String[] Pngs = {
-                "src/shifti_board_row2.png",
-                "src/shifti_board_row3.png",
-                "src/shifti_board_row4.png",
-                "src/shifti_board_row5.png"
+                "src/src/shifti_board_row2.png",
+                "src/src/shifti_board_row3.png",
+                "src/src/shifti_board_row4.png",
+                "src/src/shifti_board_row5.png"
         };
 
         for(int i = 0; i < 4; i++)
@@ -303,23 +285,15 @@ public class Board{
                 sliders.setBounds((row4Shift *cellWidth) -1,(row * 162),1230, 162);
             }
 
-            //sliders.setBounds(rowShift,(row * 162),1060, 162);
             backgroundLayer.add(sliders,JLayeredPane.PALETTE_LAYER);
 
         }
 
-        // boardShift(mainPanel);
+        boardShift(mainPanel);
 
-        // mainPanel.add(backgroundLayer);
-        // mainPanel.setBackground(Color.BLACK);
-        JPanel buttonPanel = boardShift();
-        mainPanel.add(buttonPanel, BorderLayout.WEST);
-        mainPanel.add(backgroundLayer, BorderLayout.CENTER);
+        mainPanel.add(backgroundLayer);
         mainPanel.setBackground(Color.BLACK);
-
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setBorder(null);
-        frame.add(scrollPane);
+        frame.add(mainPanel);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
     }
