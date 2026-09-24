@@ -34,11 +34,6 @@ public class Board{
 
     int currentplayer = 0;
 
-    JLabel selectedSprite = null;
-
-    int selectedPlayer = -1;
-    int spriteIndex = -1;
-
     JLabel turnLabel;
 
     String[][] SpriteIcons = {
@@ -63,59 +58,61 @@ public class Board{
     };
 
     protected void buttonClick(int row, int col){
-
-        if( selectedSprite == null){
+        for (int player = 0; player < numPLayers; player++){
             for(int i = 0; i < spriteNumber; i++){
-                if(sprites[currentplayer][i] == null){
-                    ImageIcon icon = new ImageIcon("src/src/player1_stand.png");
-                    JLabel sprite = new JLabel(icon);
+                if (sprites[player][i] != null && spriteRow[player][i] == row && spriteCol[player][i] == col) {
+
                     Component cell = board[row][col];
 
-
-                    if(cell instanceof JLayeredPane){
-                        JLayeredPane layeredcell = (JLayeredPane) cell;
-                        layeredcell.add(sprite, JLayeredPane.DRAG_LAYER);
-                        layeredcell.revalidate();
-                        layeredcell.repaint();
-                    }else if(cell instanceof Container){
-                        ((Container) cell).add(sprite);
-                        ((Container) cell).revalidate();
-                        ((Container) cell).repaint();
+                    if(cell instanceof Container){
+                        Container container = (Container) cell;
+                        container.remove(sprites[player][i]);
+                        container.revalidate();
+                        container.repaint();
                     }
+                    sprites[player][i] = null;
+                    spriteRow[player][i] = -1;
+                    spriteCol[player][i] = -1;
 
-                    sprites[currentplayer][i] = sprite;
-                    spriteRow[currentplayer][i] = row;
-                    spriteCol[currentplayer][i] = col;
-
-                    selectedSprite = sprite;
-                    selectedPlayer = currentplayer;
-                    spriteIndex = i;
-
-                    break;
+                    return;
                 }
             }
         }
-        else{
-            int oldRow = spriteRow[selectedPlayer][spriteIndex];
-            int oldCol = spriteCol[selectedPlayer][spriteIndex];
+        for(int i = 0; i < spriteNumber; i++){
+            if(sprites[currentplayer][i] == null){
+                ImageIcon icon = new ImageIcon("src/src/player1_stand.png");
+                JLabel sprite = new JLabel(icon);
 
-            Component oldCell = board[oldRow][oldCol];
+                sprite.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonClick(row, col);
+                    }
+                });
 
-            if(oldCell instanceof Container){
-                Container container = (Container) oldCell;
+                Component cell = board[row][col];
 
-                container.remove(selectedSprite);
-                container.revalidate();
-                container.repaint();
+                if(cell instanceof JLayeredPane){
+                    JLayeredPane layeredcell = (JLayeredPane) cell;
+                    layeredcell.add(sprite, JLayeredPane.DRAG_LAYER);
+                    layeredcell.revalidate();
+                    layeredcell.repaint();
+
+                }else if(cell instanceof Container){
+
+                    Container container = (Container) cell;
+
+                    container.add(sprite);
+                    container.revalidate();
+                    container.repaint();
+                }
+
+                sprites[currentplayer][i] = sprite;
+                spriteRow[currentplayer][i] = row;
+                spriteCol[currentplayer][i] = col;
+
+                return;
             }
-
-            sprites[selectedPlayer][spriteIndex] = null;
-            spriteRow[selectedPlayer][spriteIndex] = -1;
-            spriteCol[selectedPlayer][spriteIndex] = -1;
-
-            selectedSprite = null;
-            selectedPlayer = -1;
-            spriteIndex = -1;
         }
     }
 
@@ -137,14 +134,17 @@ public class Board{
         ImageIcon arrowR = new ImageIcon("src/src/arrow.png");
         ImageIcon arrowL = new ImageIcon("src/src/arrow left.png");
 
+        /*
         JButton L_arrow1 = new JButton(arrowL);
-        //L_arrow1.setBounds(0,200,114,80);
+        L_arrow1.setBounds(0,200,114,80);
 
         JButton L_arrow2 = new JButton(arrowL);
 
         JButton L_arrow3 = new JButton(arrowL);
 
         JButton L_arrow4 = new JButton(arrowL);
+
+         */
 
         JButton R_arrow1 =  new JButton(arrowR);
         R_arrow1.setBounds(0,200,114,80);
@@ -214,11 +214,13 @@ public class Board{
         });
 
          */
-
+/*
         buttonPanel.add(L_arrow1);
         buttonPanel.add(L_arrow2);
         buttonPanel.add(L_arrow3);
         buttonPanel.add(L_arrow4);
+
+ */
         buttonPanel.add(R_arrow1);
         buttonPanel.add(R_arrow2);
         buttonPanel.add(R_arrow3);
