@@ -267,7 +267,7 @@ public class Board{
             public void mouseClicked(MouseEvent e) {
                 if(row4Shift > -2) {
                     row4Shift--;
-                    slider4.setLocation((row3Shift * cellWidth) - 1, (4 * 162));
+                    slider4.setLocation((row4Shift * cellWidth) - 1, (4 * 162));
                     backgroundLayer.repaint();
                 }
             }
@@ -278,8 +278,23 @@ public class Board{
         buttonPanel.add(R_arrow3);
         buttonPanel.add(R_arrow4);
 
-        mainPanel.add(buttonPanel);
-        mainPanel.add(R_buttonPanel);
+        //fixing panels to edges
+        GridBagConstraints left = new GridBagConstraints();
+        left.gridx = 0;
+        left.gridy = 0;
+        left.weightx = 0;
+        left.weighty = 1;
+        left.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(buttonPanel, left);
+
+        GridBagConstraints right = new GridBagConstraints();
+        right.gridx = 2;
+        right.gridy = 0;
+        right.weightx = 0;
+        right.weighty = 1;
+        right.anchor = GridBagConstraints.CENTER;
+
+        mainPanel.add(R_buttonPanel,right);
 
         return mainPanel;
     }
@@ -376,7 +391,16 @@ public class Board{
 
         boardShift(mainPanel);
 
-        mainPanel.add(backgroundLayer);
+        //location of backround
+        GridBagConstraints center = new GridBagConstraints();
+        center.gridx = 1;
+        center.gridy = 0;
+        center.weightx = 0;
+        center.weighty = 1;
+        center.fill = GridBagConstraints.NONE;
+
+        mainPanel.add(backgroundLayer,center);
+
         mainPanel.setBackground(Color.BLACK);
         frame.add(mainPanel);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
