@@ -305,12 +305,7 @@ public class Board{
         frame.setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        //JPanel mainPanel = new JPanel(new BorderLayout());
-        turnLabel = new JLabel("Player Turn", SwingConstants.CENTER);
-        GridBagConstraints turnText = new GridBagConstraints();
-        turnText.insets = new Insets(0,0,0,0);
 
-        // mainPanel.add(turnLabel, turnText);
 
         //make board cells
 

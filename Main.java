@@ -24,10 +24,14 @@ public class Main {
     static BoardInput boardInput;
     static PieceMovement movement;
     static DiceRoll dice;
+    static Client client;
+    static Server server;
 
     public static void main(String[] args) {
-        board = new Board();
-        boardInput = new BoardInput(board);
+        //server =  new Server(5000);
+        client = new Client("127.0.0.1",5000);
+        //board = new Board();
+        //boardInput = new BoardInput(board);
         //board.setBoardInput(boardInput);
         //start();
     }
