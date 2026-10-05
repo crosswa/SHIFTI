@@ -1,3 +1,407 @@
-public class Board {
-    
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+
+public class Board{
+    JFrame frame = new JFrame();
+    JPanel[][] board = new JPanel[12][13];
+
+    int[][] Grid_Matrix = {//1 == true, has a tile //0 == false no tile (water)
+            {0,1,1,1,1,0,1,1,1,0,1,1,1,1,0},
+            {0,1,1,0,1,0,1,0,1,0,1,0,1,1,0},
+            {1,0,0,0,1,1,0,1,0,1,0,1,1,0,0},
+            {1,1,0,0,0,1,1,1,0,1,1,1,0,0,0},
+            {0,0,1,0,0,0,1,0,0,0,1,0,0,0,1},
+            {0,0,1,0,0,0,1,0,0,1,1,1,0,0,1},
+            {0,0,1,0,0,1,1,1,0,0,1,0,0,0,1},
+            {0,0,1,0,0,0,1,0,0,0,1,0,0,0,1},
+            {1,1,0,0,0,1,1,1,0,1,1,1,0,0,1},
+            {1,0,0,1,1,1,0,1,0,1,1,0,0,0,0},
+            {0,1,1,0,1,0,1,0,1,0,1,1,1,1,0},
+            {0,1,1,1,1,0,1,1,1,0,1,0,1,1,0}
+    };
+
+    //rowshift will be between -2 and -1 and 0 // -1 being the starting offset
+    //int offset = 0;
+    int row1Shift = -1;
+    int row2Shift = -1;
+    int row3Shift = -1;
+    int row4Shift = -1;
+
+    int cellWidth = 1060/13;
+    int cellHeight = 972/12;
+
+    JLayeredPane backgroundLayer = new JLayeredPane();
+
+    JLabel slider1;
+    JLabel slider2;
+    JLabel slider3;
+    JLabel slider4;
+
+
+    //Player icons
+    int numPLayers = 4;
+    int spriteNumber = 3;
+
+    JLabel[][] sprites = new JLabel[numPLayers][spriteNumber];
+
+    int[][] spriteRow = new int[numPLayers][spriteNumber];
+    int[][] spriteCol = new int[numPLayers][spriteNumber];
+
+    int currentplayer = 0;
+
+    JLabel turnLabel;
+
+    String[][] SpriteIcons = {
+            {
+                    "src/src/player1_stand.png",
+                    "src/src/player2_stand.png",
+                    "src/src/player3_stand.png",
+                    "src/src/player4_stand.png",
+            },
+            {
+                    "src/src/player1_sword.png",
+                    "src/src/player2_sword.png",
+                    "src/src/player3_sword.png",
+                    "src/src/player4_sword.png",
+            },
+            {
+                    "src/src/player1_swing.png",
+                    "src/src/player2_swing.png",
+                    "src/src/player3_sword.png",
+                    "src/src/player4_swing.png"
+            },
+    };
+
+    protected void buttonClick(int row, int col){
+        for (int player = 0; player < numPLayers; player++){
+            for(int i = 0; i < spriteNumber; i++){
+                if (sprites[player][i] != null && spriteRow[player][i] == row && spriteCol[player][i] == col) {
+
+                    Component cell = board[row][col];
+
+                    if(cell instanceof Container){
+                        Container container = (Container) cell;
+                        container.remove(sprites[player][i]);
+                        container.revalidate();
+                        container.repaint();
+                    }
+                    sprites[player][i] = null;
+                    spriteRow[player][i] = -1;
+                    spriteCol[player][i] = -1;
+
+                    return;
+                }
+            }
+        }
+        for(int i = 0; i < spriteNumber; i++){
+            if(sprites[currentplayer][i] == null){
+                ImageIcon icon = new ImageIcon("src/src/player1_stand.png");
+                JLabel sprite = new JLabel(icon);
+
+                sprite.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonClick(row, col);
+                    }
+                });
+
+                Component cell = board[row][col];
+
+                if(cell instanceof JLayeredPane){
+                    JLayeredPane layeredcell = (JLayeredPane) cell;
+                    layeredcell.add(sprite, JLayeredPane.DRAG_LAYER);
+                    layeredcell.revalidate();
+                    layeredcell.repaint();
+
+                }else if(cell instanceof Container){
+
+                    Container container = (Container) cell;
+
+                    container.add(sprite);
+                    container.revalidate();
+                    container.repaint();
+                }
+
+                sprites[currentplayer][i] = sprite;
+                spriteRow[currentplayer][i] = row;
+                spriteCol[currentplayer][i] = col;
+
+                return;
+            }
+        }
+    }
+
+
+
+    public Component boardShift(JPanel mainPanel){
+        JPanel buttonPanel = new JPanel();
+        JPanel R_buttonPanel = new JPanel();
+
+        buttonPanel.setLayout(null);
+        R_buttonPanel.setLayout(null);
+
+        buttonPanel.setBackground(Color.BLACK);
+        R_buttonPanel.setBackground(Color.BLACK);
+
+        buttonPanel.setPreferredSize(new Dimension(114,972));
+        R_buttonPanel.setPreferredSize(new Dimension(114,972));
+
+        ImageIcon arrowR = new ImageIcon("src/src/arrow left.png");
+        ImageIcon arrowL = new ImageIcon("src/src/arrow.png");
+
+
+        JButton L_arrow1 = new JButton(arrowL);
+        L_arrow1.setBounds(0,200,114,80);
+
+        JButton L_arrow2 = new JButton(arrowL);
+        L_arrow2.setBounds(0,360,114,80);
+
+        JButton L_arrow3 = new JButton(arrowL);
+        L_arrow3.setBounds(0,520,114,80);
+
+        JButton L_arrow4 = new JButton(arrowL);
+        L_arrow4.setBounds(0,685,114,80);
+
+        L_arrow1.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(row1Shift < 0){
+                    row1Shift ++;
+                    slider1.setLocation((row1Shift * cellWidth) -1,(1*162));
+                    backgroundLayer.repaint();
+                }
+            }
+        });
+
+        L_arrow2.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(row2Shift < 0){
+                    row2Shift ++;
+                    slider2.setLocation((row2Shift * cellWidth) -1,(2*162));
+                    backgroundLayer.repaint();
+                }
+            }
+        });
+
+        L_arrow3.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(row3Shift < 0){
+                    row3Shift ++;
+                    slider3.setLocation((row3Shift * cellWidth) -1,(3*162));
+                    backgroundLayer.repaint();
+                }
+            }
+        });
+
+        L_arrow4.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(row4Shift < 0){
+                    row4Shift ++;
+                    slider4.setLocation((row4Shift * cellWidth) -1,(4*162));
+                    backgroundLayer.repaint();
+                }
+            }
+        });
+
+
+        R_buttonPanel.add(L_arrow1);
+        R_buttonPanel.add(L_arrow2);
+        R_buttonPanel.add(L_arrow3);
+        R_buttonPanel.add(L_arrow4);
+
+
+        JButton R_arrow1 =  new JButton(arrowR);
+        R_arrow1.setBounds(0,200,114,80);
+
+        JButton R_arrow2 =  new JButton(arrowR);
+        R_arrow2.setBounds(0,360,114,80);
+
+        JButton R_arrow3 =  new JButton(arrowR);
+        R_arrow3.setBounds(0,520,114,80);
+
+        JButton R_arrow4 =  new JButton(arrowR);
+        R_arrow4.setBounds(0,685,114,80);
+
+
+        R_arrow1.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(row1Shift > -2){
+                    row1Shift --;
+                    slider1.setLocation((row1Shift * cellWidth) -1,(1*162));
+                    backgroundLayer.repaint();
+                }
+            }
+        });
+
+        R_arrow2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(row2Shift > -2) {
+                    row2Shift--;
+                    slider2.setLocation((row2Shift * cellWidth) - 1, (2 * 162));
+                    backgroundLayer.repaint();
+                }
+            }
+        });
+
+        R_arrow3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (row3Shift > -2){
+                    row3Shift--;
+                slider3.setLocation((row3Shift * cellWidth) - 1, (3 * 162));
+                backgroundLayer.repaint();
+                }
+            }
+        });
+
+        R_arrow4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(row4Shift > -2) {
+                    row4Shift--;
+                    slider4.setLocation((row4Shift * cellWidth) - 1, (4 * 162));
+                    backgroundLayer.repaint();
+                }
+            }
+        });
+
+        buttonPanel.add(R_arrow1);
+        buttonPanel.add(R_arrow2);
+        buttonPanel.add(R_arrow3);
+        buttonPanel.add(R_arrow4);
+
+        //fixing panels to edges
+        GridBagConstraints left = new GridBagConstraints();
+        left.gridx = 0;
+        left.gridy = 0;
+        left.weightx = 0;
+        left.weighty = 1;
+        left.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(buttonPanel, left);
+
+        GridBagConstraints right = new GridBagConstraints();
+        right.gridx = 2;
+        right.gridy = 0;
+        right.weightx = 0;
+        right.weighty = 1;
+        right.anchor = GridBagConstraints.CENTER;
+
+        mainPanel.add(R_buttonPanel,right);
+
+        return mainPanel;
+    }
+
+    Board() {
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+
+
+        //make board cells
+
+        for(int row = 0; row < 12; row++){
+            for(int col = 0; col < 13; col++){
+                JPanel cell = new JPanel(new BorderLayout());
+                cell.setOpaque(false);
+                board[row][col] = cell;
+
+                final int currentRow = row;
+                final int currentCol = col;
+
+                //check for click of cell and save coordinate
+                board[row][col].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        System.out.println(currentRow + "," + currentCol);
+                        buttonClick(currentRow, currentCol);
+                    }
+                });
+            }
+        }
+        //layered background
+
+        Dimension boardSize = new Dimension(1060,972);
+        backgroundLayer.setPreferredSize(new Dimension(boardSize));
+
+
+        JLabel background = new JLabel(new ImageIcon("src/src/shifti_board.png"));
+        background.setBounds(0,0,1060,972);
+
+        backgroundLayer.add(background,JLayeredPane.DEFAULT_LAYER);
+
+
+        /*
+        row shift value is updated by the board shift class
+         */
+
+
+        for(int row = 0; row < 12; row++){
+            for(int col = 0; col < 13; col++){
+                board[row][col].setBounds(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                backgroundLayer.add(board[row][col],JLayeredPane.MODAL_LAYER);
+            }
+        }
+
+        String[] Pngs = {
+                "src/src/shifti_board_row2.png",
+                "src/src/shifti_board_row3.png",
+                "src/src/shifti_board_row4.png",
+                "src/src/shifti_board_row5.png"
+        };
+
+        for(int i = 0; i < 4; i++)
+        {
+            int row = i+1;
+            JLabel sliders = new JLabel(new ImageIcon(Pngs[i]));
+            if(i == 0){
+                slider1 = sliders;
+                slider1.setBounds((row1Shift * cellWidth) -1,(row * 162),1230, 162);
+            }
+            else if(i == 1){
+                slider2 = sliders;
+                slider2.setBounds((row2Shift * cellWidth) -1,(row * 162),1230, 162);
+            }
+            else if(i == 2){
+                slider3 = sliders;
+                slider3.setBounds((row3Shift * cellWidth) -1,(row * 162),1230, 162);
+            }
+            else{
+                slider4 = sliders;
+                slider4.setBounds((row4Shift *cellWidth) -1,(row * 162),1230, 162);
+            }
+
+            backgroundLayer.add(sliders,JLayeredPane.PALETTE_LAYER);
+
+        }
+
+        boardShift(mainPanel);
+
+        //location of backround
+        GridBagConstraints center = new GridBagConstraints();
+        center.gridx = 1;
+        center.gridy = 0;
+        center.weightx = 0;
+        center.weighty = 1;
+        center.fill = GridBagConstraints.NONE;
+
+        mainPanel.add(backgroundLayer,center);
+
+        mainPanel.setBackground(Color.BLACK);
+        frame.add(mainPanel);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+
+
+
+    }
+
 }
