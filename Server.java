@@ -29,8 +29,9 @@ public class Server {
             }
             System.out.println("Closing connection");
 
-            s.close();
-            in.close();
+            if(in != null) in.close();
+            if(s != null) s.close();
+            if(ss != null) ss.close();
         }
         catch(IOException i){
             System.out.println(i);
