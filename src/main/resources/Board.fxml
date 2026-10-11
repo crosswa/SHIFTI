@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="BoardController"
+            prefWidth="700"
+            prefHeight="700">
+
+    <center>
+        <GridPane fx:id="boardGrid"
+                  alignment="CENTER"
+                  hgap="0"
+                  vgap="0" />
+    </center>
+
+</BorderPane>
