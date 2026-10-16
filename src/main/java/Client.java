@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 
 public class Client {
     private Socket s = null;
-    private DataInputStream in = null;
+    private BufferedReader in = null;
     private DataOutputStream out = null;
 
     public Client(String addr, int port) {
@@ -14,9 +14,9 @@ public class Client {
             s = new Socket(addr, port);
             System.out.println("Connected");
 
-            in = new DataInputStream(System.in);
-
+            in = new BufferedReader(new InputStreamReader(System.in));
             out = new DataOutputStream(s.getOutputStream());
+
         } catch (UnknownHostException u) {
             System.out.println(u);
             return;
@@ -31,14 +31,16 @@ public class Client {
             try {
                 m = in.readLine();
                 out.writeUTF(m);
+                out.flush();
             } catch (IOException i) {
                 System.out.println(i);
             }
 
+            System.out.println("Closing connection");
             try {
-                in.close();
-                out.close();
-                s.close();
+                if(in != null) in.close();
+                if(out != null) out.close();
+                if(s != null) s.close();
             } catch (IOException i) {
                 System.out.println(i);
             }
