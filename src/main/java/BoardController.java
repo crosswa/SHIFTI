@@ -22,6 +22,9 @@ public class BoardController {
     private final char[][] board =
             new char[ROWS][COLS];
 
+
+// ************** board generation **********************
+
     // Regular board tiles
     private Image path;
     private Image water;
@@ -54,45 +57,49 @@ public class BoardController {
     private Image player1;
     private Image player2;
 
-    // Initial player positions
-    private int player1Row = 13;
-    private int player1Col = 0;
+    // One Piece per player: index 0 = player 1, index 1 = player 2.
+    // Each Piece stores its own row/col, starting at that player's door.
+    private final Piece[] pieces = {
+            new Piece(13, 0),   // player 1 starts bottom-left
+            new Piece(0, 11)    // player 2 starts top-right
+    };
 
-    private int player2Row = 0;
-    private int player2Col = 11;
+    private int currentPlayer = 1;
+    private boolean gameOver = false;
+    private int movesLeft = 0;
 
     @FXML
     public void initialize() {
 
-        // Load regular tiles
+        // regular tiles
         path = loadImage("path.png");
         water = loadImage("water.png");
 
-        // Load red door pieces
+        // red door pieces
         redTL = loadImage("redTL.png");
         redTR = loadImage("redTR.png");
         redBL = loadImage("redBL.png");
         redBR = loadImage("redBR.png");
 
-        // Load teal door pieces
+        // teal door pieces
         tealTL = loadImage("tealTL.png");
         tealTR = loadImage("tealTR.png");
         tealBL = loadImage("tealBL.png");
         tealBR = loadImage("tealBR.png");
 
-        // Load green door pieces
+        // green door pieces
         greenTL = loadImage("greenTL.png");
         greenTR = loadImage("greenTR.png");
         greenBL = loadImage("greenBL.png");
         greenBR = loadImage("greenBR.png");
 
-        // Load yellow door pieces
+        // yellow door pieces
         yellowTL = loadImage("yellowTL.png");
         yellowTR = loadImage("yellowTR.png");
         yellowBL = loadImage("yellowBL.png");
         yellowBR = loadImage("yellowBR.png");
 
-        // Load player images
+        // player images
         player1 = loadImage("player1.png");
         player2 = loadImage("player2.png");
 
@@ -101,30 +108,21 @@ public class BoardController {
         drawBoard();
     }
 
-    /**
-     * Loads an image from src/main/resources/images.
-     */
+    // loads an image from src/main/resources/images.
     private Image loadImage(String filename) {
-
         var url = getClass().getResource(
                 "/images/" + filename
         );
-
         if (url == null) {
             throw new IllegalStateException(
                     "Missing image: /images/" + filename
             );
         }
-
         return new Image(url.toExternalForm());
     }
 
-    /**
-     * Copies BoardLayout.DEFAULT into the logical board.
-     * Every row must contain exactly COLS characters.
-     */
+    // copies BoardLayout.DEFAULT into the logical board, will be updated when board shifting is added
     private void createMap() {
-
         if (boardChar.length != ROWS) {
             throw new IllegalStateException(
                     "Board must have " + ROWS
@@ -134,7 +132,6 @@ public class BoardController {
         }
 
         for (int row = 0; row < ROWS; row++) {
-
             if (boardChar[row].length() != COLS) {
                 throw new IllegalStateException(
                         "Row " + row
@@ -143,11 +140,8 @@ public class BoardController {
                                 + boardChar[row].length()
                 );
             }
-
             for (int col = 0; col < COLS; col++) {
-
                 char tile = boardChar[row].charAt(col);
-
                 if (tile != 'S'
                         && tile != 'W'
                         && tile != '0'
@@ -161,15 +155,12 @@ public class BoardController {
                                     + ", column " + col
                     );
                 }
-
                 board[row][col] = tile;
             }
         }
     }
 
-    /**
-     * Creates a fixed-size cell for every logical grid position.
-     */
+    // fixed-size cell for every logical grid position is created
     private void createCells() {
 
         boardGrid.getChildren().clear();
@@ -193,9 +184,6 @@ public class BoardController {
         }
     }
 
-    /**
-     * Creates an ImageView sized to exactly one board cell.
-     */
     private ImageView makeView(Image image) {
 
         ImageView view = new ImageView(image);
@@ -208,10 +196,6 @@ public class BoardController {
 
         return view;
     }
-
-    /**
-     * Draws one door piece at a grid position.
-     */
     private void drawDoorPiece(
             int row,
             int col,
@@ -226,12 +210,6 @@ public class BoardController {
                 makeView(image)
         );
     }
-
-    /**
-     * Draws a door using four separate images.
-     *
-     * topRow and topCol identify the door's top-left cell.
-     */
     private void drawDoor(
             int topRow,
             int topCol,
@@ -264,13 +242,8 @@ public class BoardController {
                 bottomRight
         );
     }
-
-    /**
-     * Draws the board, doors, and players.
-     */
     private void drawBoard() {
-
-        // Draw the regular tiles first.
+        // draw the regular tiles first.
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
 
@@ -295,7 +268,7 @@ public class BoardController {
                     case '1':
                     case '2':
                     case '3':
-                        // Door artwork is drawn separately.
+                        // door artwork is drawn separately.
                         break;
 
                     default:
@@ -308,64 +281,61 @@ public class BoardController {
         }
 
         /*
-         * Draw the four 2x2 doors.
-         *
-         * 0 = red, top-left
-         * 1 = teal, top-right
-         * 2 = green, bottom-left
-         * 3 = yellow, bottom-right
-         *
-         * Opposite door pairs:
-         * Red <-> Yellow
-         * Teal <-> Green
+         draw the four 2x2 doors.
+         0 = red, top-left
+         1 = teal, top-right
+         2 = green, bottom-left
+         3 = yellow, bottom-right
+
+         Opposite door pairs:
+         Red <-> Yellow
+         Teal <-> Green
          */
 
-        // Green door: top-left
+        // green door: top-left
         drawDoor(
                 0, 0,
                 greenTL, greenTR,
                 greenBL, greenBR
         );
 
-        // Teal door: top-right
+        // teal door: top-right
         drawDoor(
                 0, COLS - 2,
                 tealTL, tealTR,
                 tealBL, tealBR
         );
 
-        // Red door: bottom-left
+        // red door: bottom-left
         drawDoor(
                 ROWS - 2, 0,
                 redTL, redTR,
                 redBL, redBR
         );
 
-        // Yellow door: bottom-right
+        // yellow door: bottom-right
         drawDoor(
                 ROWS - 2, COLS - 2,
                 yellowTL, yellowTR,
                 yellowBL, yellowBR
         );
 
-        // Draw player 1 on top of the board.
+        // draw player 1 on top of the board.
         drawPlayer(
-                player1Row,
-                player1Col,
+                pieces[0].getRow(),
+                pieces[0].getCol(),
                 player1
         );
 
-        // Draw player 2 on top of the board.
+        // draw player 2 on top of the board.
         drawPlayer(
-                player2Row,
-                player2Col,
+                pieces[1].getRow(),
+                pieces[1].getCol(),
                 player2
         );
     }
 
-    /**
-     * Draws a player at the specified position.
-     */
+    // draws a player at the specified position.
     private void drawPlayer(
             int row,
             int col,
@@ -381,14 +351,18 @@ public class BoardController {
         );
     }
 
-    /**
-     * Handles movement for player 1.
-     * Call this method when an arrow key is pressed.
-     */
-    public void handleKey(KeyCode key) {
+    // ************ logic + helper functions ***************
 
-        int newRow = player1Row;
-        int newCol = player1Col;
+    // handles movement for the player whose turn it is, called when an arrow key is pressed.
+    public void handleKey(KeyCode key) {
+        if (gameOver || movesLeft <= 0) {
+            return;
+        }
+
+        Piece piece = pieces[currentPlayer - 1];
+
+        int newRow = piece.getRow();
+        int newCol = piece.getCol();
 
         switch (key) {
 
@@ -411,44 +385,55 @@ public class BoardController {
             default:
                 return;
         }
-
-        // Keep movement inside the board.
         if (newRow < 0 || newRow >= ROWS
                 || newCol < 0 || newCol >= COLS) {
             return;
         }
-
-        // Water cannot be entered.
         if (board[newRow][newCol] == 'W') {
             return;
         }
 
-        player1Row = newRow;
-        player1Col = newCol;
+        piece.moveTo(newRow, newCol);
+        movesLeft--;
+
+        if (piece.isWin(currentPlayer)) {
+            gameOver = true;
+        } else if (movesLeft == 0) {
+            currentPlayer = (currentPlayer == 1) ? 2 : 1;
+        }
 
         drawBoard();
     }
 
-    /**
-     * Returns player 1's current position as {row, column}.
-     */
+    // helper functions
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setMovesLeft(int moves) {
+        movesLeft = moves;
+    }
+
+    public int getMovesLeft() {
+        return movesLeft;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
     public int[] getPlayerPosition() {
 
         return new int[]{
-                player1Row,
-                player1Col
+                pieces[0].getRow(),
+                pieces[0].getCol()
         };
     }
-
-    /**
-     * Returns player 2's current position as {row, column}.
-     */
     public int[] getPlayer2Position() {
 
         return new int[]{
-                player2Row,
-                player2Col
+                pieces[1].getRow(),
+                pieces[1].getCol()
         };
     }
 }
-

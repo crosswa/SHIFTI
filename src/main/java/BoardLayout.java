@@ -18,6 +18,9 @@ public class BoardLayout {
         Green <-> Teal
         
         The green-to-teal route is connected.
+
+        there is a default layout for now, in future cycles this class will be used 
+        to create more randomized layouts and handles board shifting.
      */
 
     public static final String[] DEFAULT = {
