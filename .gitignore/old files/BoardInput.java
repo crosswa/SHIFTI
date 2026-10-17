@@ -17,9 +17,9 @@ public class BoardInput {
     }
 
     //button click function, called when a grid square is clicked
-    protected void ButtonClick(int row, int col) {
-        selectSquare(row, col);
-        board.ButtonClick(row, col);   
+    public void ButtonClick(int row, int col) {
+        selectSquare(row, col); 
+        board.buttonClick(row, col);
     }
 
     //this is called within the button click function to grab which square has been clicked
@@ -72,6 +72,37 @@ public class BoardInput {
         }
         return -1; // unreachable
     }
+
+    // returns every square exactly `steps` tiles away by the shortest walkable path
+public java.util.List<int[]> getReachableSquares(int startRow, int startCol, int steps) {
+    int rows = board.Grid_Matrix.length;
+    int cols = board.Grid_Matrix[0].length;
+    boolean[][] visited = new boolean[rows][cols];
+    Queue<int[]> queue = new LinkedList<>();
+    queue.add(new int[]{startRow, startCol, 0});
+    visited[startRow][startCol] = true;
+
+    java.util.List<int[]> results = new java.util.ArrayList<>();
+    int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
+
+    while (!queue.isEmpty()) {
+        int[] current = queue.poll();
+        if (current[2] == steps) {
+            results.add(new int[]{current[0], current[1]});
+            continue; // don't expand past the exact distance we want
+        }
+        for (int[] d : directions) {
+            int nr = current[0] + d[0];
+            int nc = current[1] + d[1];
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols
+                && !visited[nr][nc] && board.Grid_Matrix[nr][nc] == 1) {
+                visited[nr][nc] = true;
+                queue.add(new int[]{nr, nc, current[2] + 1});
+            }
+        }
+    }
+    return results;
+}
 
     //helper for returning the destination square, called for piece movement
     public int[] getDestination(int startX, int startY, int steps, int player) {

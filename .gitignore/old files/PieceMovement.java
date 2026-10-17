@@ -10,6 +10,8 @@ public class PieceMovement {
 
     private Piece[][] pieces;
 
+    private int currentPlayer;
+
     //constructor, uses piece class to build each piece for the player
     public PieceMovement (Board board) {
         this.board = board;
@@ -27,6 +29,8 @@ public class PieceMovement {
     //moves the piece on the board, uses board input to determine moves chosen
     public void movePiece(int player, int pieceIndex, int steps, BoardInput boardInput) {
         Piece piece = pieces[player][pieceIndex];
+
+        currentPlayer = player;
 
         int[] dest = boardInput.getDestination(piece.x, piece.y, steps, player); //steps= number the dice rolled
 
@@ -109,6 +113,10 @@ public class PieceMovement {
     public boolean isWinningSquare(int row, int col, int player) {
         //returns t/f based on if the player is on their winning square
         return row == pieces[player][0].winningSquare[0] && col == pieces[player][0].winningSquare[1];
+    }
+
+    public int getPlayer(){
+        return currentPlayer;
     }
 
 }
