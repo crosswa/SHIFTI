@@ -358,30 +358,22 @@ public class BoardController {
         if (gameOver || movesLeft <= 0) {
             return;
         }
-
         Piece piece = pieces[currentPlayer - 1];
-
         int newRow = piece.getRow();
         int newCol = piece.getCol();
-
         switch (key) {
-
             case UP:
                 newRow--;
                 break;
-
             case DOWN:
                 newRow++;
                 break;
-
             case LEFT:
                 newCol--;
                 break;
-
             case RIGHT:
                 newCol++;
                 break;
-
             default:
                 return;
         }
@@ -393,15 +385,22 @@ public class BoardController {
             return;
         }
 
+        // legal move: store it on the piece and use up one move.
         piece.moveTo(newRow, newCol);
         movesLeft--;
-
+ 
         if (piece.isWin(currentPlayer)) {
             gameOver = true;
-        } else if (movesLeft == 0) {
-            currentPlayer = (currentPlayer == 1) ? 2 : 1;
+        } else {
+            // if piece landed on the other player's piece, send it back to its start.
+            // checked on every step, so it also applies mid-turn
+            PieceCapture.captureAll(piece, pieces);
+ 
+            if (movesLeft == 0) {
+                currentPlayer = (currentPlayer == 1) ? 2 : 1;
+            }
         }
-
+ 
         drawBoard();
     }
 

@@ -34,10 +34,10 @@ public static boolean capture(Piece mover, Piece other)
     if (mover == other || !isSameTile(mover, other)) {
         return false;
     }
-
-    other.moveTo(OFF_BOARD, OFF_BOARD);
+ 
+    other.resetToStart();   // was other.moveTo(OFF_BOARD, OFF_BOARD)
     return true;
-
+ 
  }
 
 // Same as capture() from earlier, but checks the mover against every piece in the array.
@@ -51,7 +51,7 @@ public static boolean captureAll(Piece mover, Piece [] pieces) {
         }
     }
 
-    return captured = true;
+    return captured;
 }
 
 

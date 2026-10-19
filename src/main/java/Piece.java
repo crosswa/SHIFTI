@@ -2,11 +2,24 @@ public class Piece {
     private int x;
     private int y;
 
+    // The tile this piece started on (a captured piece is sent back here)
+    private final int startX;
+    private final int startY;
+
     public Piece(int x, int y) {
         this.x = x;
         this.y = y;
+        this.startX = x;
+        this.startY = y;
     }
 
+    // Sends the piece back to its starting tile (used by PieceCapture)
+    public void resetToStart() {
+        this.x = startX;
+        this.y = startY;
+    }
+
+    // x = row, y = column on the board grid
     public int getRow() {
         return x;
     }
@@ -21,7 +34,7 @@ public class Piece {
         this.y = col;
     }
 
-    // path checking is already in BoardController
+    //checks if the movement is valid, path checking is already in BoardController
     public boolean canMove(int row, int col) {
         return true;
     }
