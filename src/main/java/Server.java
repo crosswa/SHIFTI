@@ -17,34 +17,40 @@ public class Server {
             while(true){
                 s = ss.accept();
                 System.out.println("New Client accepted: " + s.getRemoteSocketAddress());
+                //Thread clientThread = new Thread(new ClientHandler(s));
+                //clientThread.start();
+                in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+                String m = "";
 
-                Thread clientThread = new Thread(new ClientHandler(s));
-                clientThread.start();
-            }
-        }catch(IOException i){
-            in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
-
-            String m = "";
-
-            while(!m.equals("Over")){
-                try{
-                    m = in.readUTF();
-                    System.out.println(m);
+                while(true){
+                    try{
+                        m = in.readUTF();
+                        System.out.println(m);
+                        if(m.equals("Over")){
+                            System.out.println("Closing connection");
+                            if(in != null) in.close();
+                            if(s != null) s.close();
+                            if(ss != null) ss.close();
+                            break;
+                        }
+                    }catch(IOException e){
+                        System.out.println(e);
+                        if(in != null) in.close();
+                        if(s != null) s.close();
+                        break;
+                    }
                 }
-                catch(IOException i){
-                    System.out.println(i);
-                }
             }
-            System.out.println("Closing connection");
-
+    }catch(IOException i){
+            System.out.println(i);
+    }finally{
+        try{
             if(in != null) in.close();
-            if(s != null) s.close();
-            if(ss != null) ss.close();
-        }
-        catch(IOException i){
+        }catch(IOException i){
             System.out.println(i);
         }
     }
+}
     public static void main (String args[]){
         Server s = new Server(5000);
     }

@@ -6,6 +6,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
+    //public int players;
+    //public int[] playermoves;
+
     private Socket s = null;
     private BufferedReader in = null;
     private DataOutputStream out = null;
@@ -16,7 +19,6 @@ public class Client {
             System.out.println("Connected");
 
             in = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("IN");
             out = new DataOutputStream(s.getOutputStream());
 
         } catch (UnknownHostException u) {
