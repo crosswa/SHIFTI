@@ -14,9 +14,14 @@ public class Server {
             System.out.println("Server Started");
             System.out.println("Waiting for client");
 
-            s = ss.accept();
-            System.out.println("Client accepted");
+            while(true){
+                s = ss.accept();
+                System.out.println("New Client accepted: " + s.getRemoteSocketAddress());
 
+                Thread clientThread = new Thread(new ClientHandler(s));
+                clientThread.start();
+            }
+        }catch(IOException i){
             in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
 
             String m = "";
