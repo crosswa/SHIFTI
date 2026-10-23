@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 
 public class Client {
     //public int players;
-    //public int[] playermoves;
+    //public int[] playermoves; 
 
     private Socket s = null;
     private BufferedReader in = null;
