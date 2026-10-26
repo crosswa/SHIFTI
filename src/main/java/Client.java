@@ -54,6 +54,6 @@ public class Client {
         }
     }
         public static void main(String args[]) {
-        Client c = new Client("0.0.0.0", 5000);
+        Client c = new Client("192.168.204.190", 5000);
     }
 }

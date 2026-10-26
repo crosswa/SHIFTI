@@ -63,6 +63,6 @@ public class Server {
     }
 
     public static void main (String args[]) {
-        Server s = new Server("0.0.0.0",5000);
+        Server s = new Server("192.168.204.190",5000);
     }
 }
