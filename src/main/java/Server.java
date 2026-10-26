@@ -3,16 +3,19 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.InetAddress;
 
 public class Server {
     private Socket s = null;
     private ServerSocket ss = null;
     private DataInputStream in = null;
 
-    public Server(int port) {
+    public Server(String addr, int port) {
         try {
-            ss = new ServerSocket(port);
-            System.out.println("Server Started");
+            InetAddress bindAddress = InetAddress.getByName(addr);
+            ss = new ServerSocket(port,50, bindAddress);
+
+            System.out.println("Server Started " + addr + ":" + port);
             System.out.println("Waiting for client");
 
             while(true) {
@@ -60,6 +63,6 @@ public class Server {
     }
 
     public static void main (String args[]) {
-        Server s = new Server(192.52.220.34,5000);
+        Server s = new Server("0.0.0.0",5000);
     }
 }
