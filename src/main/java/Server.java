@@ -44,7 +44,7 @@ public class Server {
                     } catch(IOException e) {
                         System.out.println(e);
                     }
-                }).start();
+                }).start(); // Fixed the missing dot here
                 
             }
             
@@ -60,6 +60,6 @@ public class Server {
     }
 
     public static void main (String args[]) {
-        Server s = new Server(5000);
+        Server s = new Server(192.52.220.34,5000);
     }
 }
