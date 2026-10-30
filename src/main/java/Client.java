@@ -18,7 +18,6 @@ public class Client {
             in = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("IN");
             out = new DataOutputStream(s.getOutputStream());
-            System.out.println("OUT");
 
         } catch (UnknownHostException u) {
             System.out.println(u);
@@ -52,7 +51,10 @@ public class Client {
                 }
         }
     }
+
         public static void main(String args[]) {
-        Client c = new Client("127.0.0.1", 5000);
+        String host = "2.tcp.ngrok.io";
+        int port = ;
+        Client c = new Client(host, port);
     }
 }
