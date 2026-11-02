@@ -60,18 +60,17 @@ public class Main extends Application {
         controller.setMovesLeft(dice.getSum());
     }
 
-    // window title: player's turn, the roll, and moves left - or the winner.
+    // window title: player's turn or the winner.
     private static void updateTitle(Stage stage, BoardController controller) {
         if (controller.isGameOver()) {
             stage.setTitle("Minotaur's Maze - Player "
                     + controller.getCurrentPlayer() + " wins!");
         } else {
             stage.setTitle("Minotaur's Maze - Player "
-                    + controller.getCurrentPlayer() + "'s turn | Rolled "
-                    + dice.getValueA() + " + " + dice.getValueB()
-                    + " | Moves left: " + controller.getMovesLeft());
+                    + controller.getCurrentPlayer() + "'s turn");
         }
     }
+    
 
     public static void main(String[] args) {
         launch(args);

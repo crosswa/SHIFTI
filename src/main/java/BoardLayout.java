@@ -5,6 +5,8 @@ public class BoardLayout {
         
         Board size: 15 rows x 13 columns
         
+        13x 13 should be flip flopped and the 1 and 15th rows should be not accessable since they are shifted on and off the board.
+        
         S = Stone/path (walkable)
         W = Water (blocked)
         
