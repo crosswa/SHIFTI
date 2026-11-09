@@ -1,4 +1,5 @@
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -10,11 +11,12 @@ public class BoardController {
     private static final int ROWS = 15;
     private static final int COLS = 13;
     private static final int TILE_SIZE = 40;
-
+    BoardLayout boardLayout = new BoardLayout();
+    
     @FXML
     private GridPane boardGrid;
 
-    private final String[] boardChar = BoardLayout.DEFAULT;
+    private final String[] boardChar = boardLayout.createBoard();
 
     private final StackPane[][] cells =
             new StackPane[ROWS][COLS];
@@ -179,9 +181,35 @@ public class BoardController {
 
                 cells[row][col] = cell;
 
-                boardGrid.add(cell, col, row);
+                boardGrid.add(cell, col + 1, row);
             }
         }
+
+        int shiftRowCount = 13;
+        int firstShiftGridRow = 1;
+
+        for (int slider = 1; slider <= shiftRowCount; slider++) {
+            int gridRow = firstShiftGridRow + slider - 1;
+            addShiftButton(slider, -1, 0, gridRow);
+            addShiftButton(slider, +1, COLS + 1, gridRow);
+        }
+    }
+
+    private void addShiftButton(int slider, int direction, int gridCol, int gridRow) {
+        boolean left = direction < 0;
+        Button button = new Button(left ? "←" : "→");
+
+        button.setPrefSize(TILE_SIZE, TILE_SIZE);
+        button.setFocusTraversable(false);
+        button.setAccessibleText(
+                "Shift slider " + slider + (left ? " left" : " right"));
+        button.setOnAction(event -> requestShift(slider, direction));
+
+        boardGrid.add(button, gridCol, gridRow);
+    }
+
+    private void requestShift(int slider, int direction) {
+        System.out.println("Slider " + slider + (direction < 0 ? " left" : " right"));
     }
 
     private ImageView makeView(Image image) {

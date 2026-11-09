@@ -1,3 +1,4 @@
+
 public class BoardLayout {
 
     /*
@@ -24,9 +25,24 @@ public class BoardLayout {
         there is a default layout for now, in future cycles this class will be used 
         to create more randomized layouts and handles board shifting.
      */
+    public static final int ROWS = 15;
+    public static final int COLS = 13;
+    private String[] board;
+
+// The first and last physical rows are outside the playable board.
+    public static final int FIRST_PLAYABLE_ROW = 1;
+    public static final int LAST_PLAYABLE_ROW = 13;
+
+    public static final int PLAYABLE_ROWS = 13;
+    public static final int PLAYABLE_COLS = 13;
+
+    private final BoardShift boardShift;
+
+    public BoardLayout() {
+        boardShift = new BoardShift();
+    }
 
     public static final String[] DEFAULT = {
-
         "0SWWSSSWWSS1S",
         "SSWSSWSWSSSSS",
         "SWWSSSSWSWSSW",
@@ -44,4 +60,44 @@ public class BoardLayout {
         "SSSWWSWSWSWSS"
 
     };
+
+    public static boolean isPlayable(int row, int col) {
+        return row >= FIRST_PLAYABLE_ROW
+                && row <= LAST_PLAYABLE_ROW
+                && col >= 0
+                && col < COLS;
+    }
+
+    public String[] createBoard() {
+
+        String[] board = DEFAULT.clone();
+
+        // Randomization will go here.
+        return board;
+    }
+
+    public char tileAt(int row, int col) {
+    int slider = BoardShift.sliderForColumn(col);
+    int displacement = slider == 0 ? 0
+            : boardShift.getOffset(slider) - BoardShift.START_OFFSET;
+
+    return DEFAULT[row - displacement].charAt(col);
+}
+
+    // Board shifting will eventually use these
+    public boolean shiftSlider(int slider, int amount) {
+        return boardShift.shiftSlider(slider, amount);
+    }
+
+    public int getSliderOffset(int slider) {
+        return boardShift.getOffset(slider);
+    }
+
+    public boolean canShift(int slider, int amount) {
+        return boardShift.canShift(slider, amount);
+    }
+
+    public void resetShifts() {
+        boardShift.resetOffsets();
+    }
 }

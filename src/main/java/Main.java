@@ -8,7 +8,9 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     // the dice is rolled once at the start of every turn.
-    private static final diceCycle1 dice = new diceCycle1();
+    
+    // private static final diceCycle1 dice = new diceCycle1();
+    private static final diceCycle2 dice = new diceCycle2();
 
     @Override
     public void start(Stage stage) throws Exception {
