@@ -353,6 +353,7 @@ public class BoardController {
 
     // ************ logic + helper functions ***************
 
+    
     // handles movement for the player whose turn it is, called when an arrow key is pressed.
     public void handleKey(KeyCode key) {
         if (gameOver || movesLeft <= 0) {
@@ -388,6 +389,9 @@ public class BoardController {
         // legal move: store it on the piece and use up one move.
         piece.moveTo(newRow, newCol);
         movesLeft--;
+        if(client != null) {
+            client.sendMove(currentPlayer, newRow, newCol);
+        }
  
         if (piece.isWin(currentPlayer)) {
             gameOver = true;
@@ -434,5 +438,21 @@ public class BoardController {
                 pieces[1].getRow(),
                 pieces[1].getCol()
         };
+    }
+
+    private Client client;
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+
+    public void recieveMove(int player, int row, int col) {
+        if (player < 1 || player > 2) {
+            return;
+        }
+        Piece piece = pieces[player - 1];
+        piece.moveTo(row, col);
+
+        drawBoard();
     }
 }
