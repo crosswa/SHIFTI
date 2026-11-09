@@ -5,9 +5,9 @@ import java.util.Random;
 public class BoardShift {
 
 //Alright you know the drill, grab the row and column, initialize the offsets first
-    public static final int FIRST_STRIP_ROW = 2;
-    public static final int NUM_SLIDERS = 4;
-    public static final int ROWS_PER_SLIDER = 2;
+    public static final int FIRST_STRIP_ROW = BoardLayout.FIRST_PLAYABLE_ROW;
+    public static final int NUM_SLIDERS = BoardLayout.PLAYABLE_ROWS;
+    public static final int ROWS_PER_SLIDER = 1;
 
     public static final int MIN_OFFSET = -2;
     public static final int MAX_OFFSET = 0;
@@ -38,7 +38,7 @@ public class BoardShift {
     public static void changeGrid(int[][] grid) {
         Random random = new Random();
         int lastStripRow = FIRST_STRIP_ROW + NUM_SLIDERS * ROWS_PER_SLIDER - 1;
-        for (int row = FIRST_STRIP_ROW; row <= lastStripRow; row++) {
+        for (int row = FIRST_STRIP_ROW; row <= lastStripRow && row < grid.length; row++) {
             for (int col = 0; col < grid[row].length; col++) {
                 if (grid[row][col] == 1 && random.nextBoolean()) {
                     grid[row][col] = 0;
@@ -48,6 +48,9 @@ public class BoardShift {
     }
 
     public boolean canShift(int slider, int amount) {
+        if (slider < 1 || slider > NUM_SLIDERS || (amount != -1 && amount != 1)) {
+            return false;
+        }
         int target = offsets[slider - 1] + amount;
         return target >= MIN_OFFSET && target <= MAX_OFFSET;
     }

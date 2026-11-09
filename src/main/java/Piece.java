@@ -39,12 +39,15 @@ public class Piece {
         return true;
     }
 
+    public static BoardLayout.Door goalFor(int player) {
+        return switch (player) {
+            case 1 -> BoardLayout.TEAL;
+            case 2 -> BoardLayout.RED;
+            default -> throw new IllegalArgumentException("Unknown player: " + player);
+        };
+    }
+
     public boolean isWin(int player) {
-        if (player == 1) {
-            return x == 0 && y == 11;
-        } else if (player == 2) {
-            return x == 13 && y == 0;
-        }
-        return false;
+        return goalFor(player).isEntrance(x, y);
     }
 }
