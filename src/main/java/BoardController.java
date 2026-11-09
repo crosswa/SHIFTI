@@ -32,8 +32,10 @@ public class BoardController {
     private int shiftsLeft;
     private Runnable onAction = () -> {};
 
+    // *** BOARD BUILDING ***
     @FXML
     public void initialize() {
+        boardLayout.createBoard();
         path = loadImage("path.png");
         water = loadImage("water.png");
 
@@ -130,6 +132,7 @@ public class BoardController {
         updateShiftButtons();
     }
 
+    // *** LOGIC BEHIND BOARD ***
     private void updateShiftButtons() {
         boolean show = !gameOver && shiftsLeft > 0;
         for (int row = BoardLayout.FIRST_PLAYABLE_ROW; row <= BoardLayout.LAST_PLAYABLE_ROW; row++) {
@@ -240,6 +243,7 @@ public class BoardController {
         currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 
+    // *** HELPERS ***
     public int getCurrentPlayer() {
         return currentPlayer;
     }

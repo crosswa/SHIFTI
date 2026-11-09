@@ -1,5 +1,4 @@
 import java.util.Random;
-import java.util.Scanner;
 
 /*
 Dice layout:
@@ -86,6 +85,11 @@ public class diceCycle2 {
         }
         return String.valueOf(value);
     }
+}
+
+/* 
+    *** DICE TESTING WITH PRINT LINES, got commented out bc it is now hooked up to main **
+
 
     //placeholder actions 
     private void movePiece(int pieceIndex, int spaces) {
@@ -325,3 +329,4 @@ public class diceCycle2 {
         input.close();
     }
 }
+    */

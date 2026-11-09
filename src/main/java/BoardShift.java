@@ -84,60 +84,64 @@ public class BoardShift {
     }
 
 }
-// public static void doSliderShift(int starValue, Scanner input) {
-//     if (starValue == 1) {
-//         int slider = askSlider(input, "Which slider shifts once (1-4)? ");
-//         doOneShift(slider, input);
-//     } else if (starValue == 2) {
-//         System.out.println("Double star - choose:");
-//         System.out.println("  1) Shift one slider twice");
-//         System.out.println("  2) Shift two different sliders once each");
-//         int choice = readInt(input, "Choose 1 or 2: ", 1, 2);
+/* 
 
-//         if (choice == 1) {
-//             int slider = askSlider(input, "Which slider shifts twice (1-4)? ");
-//             doOneShift(slider, input);
-//             doOneShift(slider, input);
-//         } else {
-//             int first = askSlider(input, "First slider to shift once (1-4)? ");
-//             doOneShift(first, input);
-//             int second;
-//             do {
-//                 second = askSlider(input, "Second slider to shift once (1-4)? ");
-//                 if (second == first) System.out.println("Choose a different slider.");
-//             } while (second == first);
-//             doOneShift(second, input);
-//         }
-//     }
-// }
-// private static void doOneShift(int slider, Scanner input) {
-//     while (true) {
-//         System.out.println("Shift slider " + slider + " which way? (current offset "
-//                 + getOffSet(slider) + ")");
-//         System.out.println("  1) Left   2) Right");
-//         int amount = readInt(input, "Choose 1 or 2: ", 1, 2) == 1 ? -1 : 1;
-//         if (shiftSlider(slider, amount)) {
-//             System.out.println("Slider " + slider + " is now at offset " + getOffSet(slider) + ".");
-//             return;
-//         }
-//         System.out.println("Slider " + slider + " can't go that way. Try the other direction.");
-//     }
-// }
-//     private static int askSlider(Scanner input, String prompt) {
-//         return readInt(input, prompt, 1, NUM_SLIDERS);
-//     }
-//     private static int readInt(Scanner input, String prompt, int min, int max) {
-//         while (true) {
-//             System.out.print(prompt);
-//             if (input.hasNextInt()) {
-//                 int val = input.nextInt();
-//                 if (val >= min && val <= max) return val;
-//                 System.out.println("Enter a number between " + min + " and " + max + ".");
-//             } else {
-//                 System.out.println("Please enter a number.");
-//                 input.next();
-//             }
-//         }
-//     }
-// }
+*** BOARD SHIFT TESTING WITH PRINT LINES , commented out now with it wired into main ****
 
+public static void doSliderShift(int starValue, Scanner input) {
+    if (starValue == 1) {
+        int slider = askSlider(input, "Which slider shifts once (1-4)? ");
+        doOneShift(slider, input);
+    } else if (starValue == 2) {
+        System.out.println("Double star - choose:");
+        System.out.println("  1) Shift one slider twice");
+        System.out.println("  2) Shift two different sliders once each");
+        int choice = readInt(input, "Choose 1 or 2: ", 1, 2);
+
+        if (choice == 1) {
+            int slider = askSlider(input, "Which slider shifts twice (1-4)? ");
+            doOneShift(slider, input);
+            doOneShift(slider, input);
+        } else {
+            int first = askSlider(input, "First slider to shift once (1-4)? ");
+            doOneShift(first, input);
+            int second;
+            do {
+                second = askSlider(input, "Second slider to shift once (1-4)? ");
+                if (second == first) System.out.println("Choose a different slider.");
+            } while (second == first);
+            doOneShift(second, input);
+        }
+    }
+}
+private static void doOneShift(int slider, Scanner input) {
+    while (true) {
+        System.out.println("Shift slider " + slider + " which way? (current offset "
+                + getOffSet(slider) + ")");
+        System.out.println("  1) Left   2) Right");
+        int amount = readInt(input, "Choose 1 or 2: ", 1, 2) == 1 ? -1 : 1;
+        if (shiftSlider(slider, amount)) {
+            System.out.println("Slider " + slider + " is now at offset " + getOffSet(slider) + ".");
+            return;
+        }
+        System.out.println("Slider " + slider + " can't go that way. Try the other direction.");
+    }
+}
+    private static int askSlider(Scanner input, String prompt) {
+        return readInt(input, prompt, 1, NUM_SLIDERS);
+    }
+    private static int readInt(Scanner input, String prompt, int min, int max) {
+        while (true) {
+            System.out.print(prompt);
+            if (input.hasNextInt()) {
+                int val = input.nextInt();
+                if (val >= min && val <= max) return val;
+                System.out.println("Enter a number between " + min + " and " + max + ".");
+            } else {
+                System.out.println("Please enter a number.");
+                input.next();
+            }
+        }
+    }
+}
+*/
