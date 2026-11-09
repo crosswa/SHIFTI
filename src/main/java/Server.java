@@ -11,6 +11,7 @@ public class Server {
 
     private static CopyOnWriteArrayList<ClientHandler> clients =
             new CopyOnWriteArrayList<>();
+    int numClients = 2;
 
     public Server(String addr, int port) {
 
@@ -22,12 +23,27 @@ public class Server {
             System.out.println("Server Started " + addr + ":" + port);
             System.out.println("Waiting for clients");
 
+            for(int i = 0; i < 2; i++) {
+                try{
+                ProcessBuilder pb = new ProcessBuilder(
+                        "java", "-cp", System.getProperty("java.class.path"), "Client");
+                pb.redirectErrorStream(true);
+                pb.inheritIO();
+
+                Process clientProcess = pb.start();
+                }catch (IOException e) {
+                    System.out.println("Error starting client process: " + e.getMessage());
+                }
+            }
+
+
             while (true) {
 
                 Socket s = ss.accept();
 
                 System.out.println("New Client accepted: "
                         + s.getRemoteSocketAddress());
+                        
 
                 ClientHandler client = new ClientHandler(s);
 
