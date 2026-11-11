@@ -77,6 +77,7 @@ public class Main extends Application {
     private void updateTitle(Stage stage, BoardController controller) {
         String title = "Minotaur's Maze - Player " + controller.getCurrentPlayer();
         if (controller.isGameOver()) {
+            controller.showWin();
             stage.setTitle(title + " wins!");
         } else if (!dice.hasRolled()) {
             stage.setTitle(title + "'s turn | Roll the dice");

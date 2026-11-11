@@ -296,6 +296,10 @@ public class BoardController {
     public void showCapture(){
         showBanner("Player " + currentPlayer + " captured Player " + getOppPlayer() + "'s piece!");
     }
+    public void showWin()
+    {
+        showBanner("Player " + currentPlayer + " escaped!");
+    }
 
     // *** HELPERS ***
     public int getCurrentPlayer() {
