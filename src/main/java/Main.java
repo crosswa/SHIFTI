@@ -16,37 +16,58 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         scene.setOnKeyPressed(event -> controller.handleKey(event.getCode()));
+        controller.setOnRollDice(() -> {
+            rollForTurn(stage, controller);
+            root.requestFocus();
+        });
         controller.setOnAction(() -> {
             if (!controller.isGameOver() && controller.isTurnComplete()) {
                 controller.advanceTurn();
-                rollForTurn(controller);
+                prepareTurn(stage, controller);
+            } else {
+                updateTitle(stage, controller);
             }
-            updateTitle(stage, controller);
         });
 
         stage.setScene(scene);
         stage.setResizable(false);
-        rollForTurn(controller);
-        updateTitle(stage, controller);
+        prepareTurn(stage, controller);
         stage.show();
         root.requestFocus();
     }
 
-    private void rollForTurn(BoardController controller) {
-        while (true) {
-            dice.roll();
-            int a = dice.getValueA();
-            int b = dice.getValueB();
-            if (!dice.bothStars()) {
-                int moves = Math.max(0, a) + Math.max(0, b);
-                int shifts = Math.max(0, -a) + Math.max(0, -b);
-                controller.beginTurn(moves, shifts);
-                if (!controller.isTurnComplete()) {
-                    return;
-                }
-            }
-            controller.advanceTurn();
+    private void prepareTurn(Stage stage, BoardController controller) {
+        dice.reset();
+        controller.beginTurn(0, 0);
+        controller.setRollAvailable(true);
+        controller.showTurnBanner();
+        updateTitle(stage, controller);
+    }
+
+    private void rollForTurn(Stage stage, BoardController controller) {
+        if (dice.hasRolled() || controller.isGameOver()) {
+            return;
         }
+
+        dice.roll();
+        controller.setRollAvailable(false);
+        int a = dice.getValueA();
+        int b = dice.getValueB();
+        controller.showRoll(face(a), face(b));
+        if (dice.bothStars()) {
+            int skippedPlayer = controller.getCurrentPlayer();
+            controller.advanceTurn();
+            prepareTurn(stage, controller);
+            controller.showBanner("Player " + skippedPlayer + " rolled double stars! Turn skipped!");
+            return;
+        }
+        int moves = Math.max(0, a) + Math.max(0, b);
+        int shifts = Math.max(0, -a) + Math.max(0, -b);
+        controller.beginTurn(moves, shifts);
+        if (!controller.isTurnComplete()) {
+            updateTitle(stage, controller);
+        }
+        
     }
 
     private static String face(int value) {
@@ -57,6 +78,8 @@ public class Main extends Application {
         String title = "Minotaur's Maze - Player " + controller.getCurrentPlayer();
         if (controller.isGameOver()) {
             stage.setTitle(title + " wins!");
+        } else if (!dice.hasRolled()) {
+            stage.setTitle(title + "'s turn | Roll the dice");
         } else {
             stage.setTitle(title + "'s turn | Rolled "
                     + face(dice.getValueA()) + " + " + face(dice.getValueB())

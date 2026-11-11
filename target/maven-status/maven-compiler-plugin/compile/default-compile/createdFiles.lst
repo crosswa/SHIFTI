@@ -4,6 +4,5 @@ Main.class
 BoardLayout.class
 BoardController.class
 Client.class
-TextDisplay.class
 Server.class
 Piece.class

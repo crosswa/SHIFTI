@@ -1,10 +1,15 @@
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 
 public class BoardController {
 
@@ -13,6 +18,12 @@ public class BoardController {
 
     @FXML
     private GridPane boardGrid;
+    @FXML
+    private Label turnBanner;
+    @FXML
+    private Button rollDiceButton;
+
+    private SequentialTransition turnBannerAnimation;
 
     private final ImageView[][] tiles = new ImageView[BoardLayout.ROWS][BoardLayout.COLS];
     private final Button[][] shiftButtons = new Button[BoardLayout.ROWS][2];
@@ -27,6 +38,7 @@ public class BoardController {
     private final ImageView[] sprites = new ImageView[pieces.length];
 
     private int currentPlayer = 1;
+    private int oppPlayer;
     private boolean gameOver;
     private int movesLeft;
     private int shiftsLeft;
@@ -35,6 +47,13 @@ public class BoardController {
     // *** BOARD BUILDING ***
     @FXML
     public void initialize() {
+        PauseTransition hold = new PauseTransition(Duration.seconds(2));
+        FadeTransition fade = new FadeTransition(Duration.millis(500), turnBanner);
+        fade.setFromValue(1);
+        fade.setToValue(0);
+        turnBannerAnimation = new SequentialTransition(hold, fade);
+        turnBannerAnimation.setOnFinished(event -> turnBanner.setVisible(false));
+
         boardLayout.createBoard();
         path = loadImage("path.png");
         water = loadImage("water.png");
@@ -206,13 +225,28 @@ public class BoardController {
 
         piece.moveTo(newRow, newCol);
         movesLeft--;
+
+        boolean captured = false;
         if (piece.isWin(currentPlayer)) {
             gameOver = true;
         } else {
-            PieceCapture.captureAll(piece, pieces);
+            captured = PieceCapture.captureAll(piece, pieces);
         }
+
         drawBoard();
         onAction.run();
+
+        if (captured) {
+            showCapture();
+        }
+    }
+
+    public void setOnRollDice(Runnable rollDice) {
+        rollDiceButton.setOnAction(event -> rollDice.run());
+    }
+
+    public void setRollAvailable(boolean available) {
+        rollDiceButton.setDisable(!available);
     }
 
     public void setOnAction(Runnable onAction) {
@@ -243,9 +277,38 @@ public class BoardController {
         currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 
+    // *** BANNER DISPLAY ***
+    public void showBanner(String message) {
+        turnBannerAnimation.stop();
+        turnBanner.setText(message);
+        turnBanner.setOpacity(1);
+        turnBanner.setVisible(true);
+        turnBannerAnimation.playFromStart();
+    }
+
+    public void showTurnBanner() {
+        showBanner("Player " + currentPlayer + "’s turn");
+    }
+    public void showRoll(String a, String b) {
+        showBanner("Roll: " + a + " + " + b);
+    }
+
+    public void showCapture(){
+        showBanner("Player " + currentPlayer + " captured Player " + getOppPlayer() + "'s piece!");
+    }
+
     // *** HELPERS ***
     public int getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public int getOppPlayer() {
+        if (currentPlayer==1){
+            return 2;
+        }
+        else {
+            return 1;
+        }
     }
 
     public int getMovesLeft() {
