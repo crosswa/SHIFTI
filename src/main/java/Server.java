@@ -1,46 +1,137 @@
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.InetAddress;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server {
-    private  Socket s = null;
-    private ServerSocket ss = null;
-    private DataInputStream in = null;
-    public Server(int port){
-        try{
-            ss = new ServerSocket(port);
-            System.out.println("Server Started");
-            System.out.println("Waiting for client");
 
-            s = ss.accept();
-            System.out.println("Client accepted");
+    private static CopyOnWriteArrayList<ClientHandler> clients =
+            new CopyOnWriteArrayList<>();
+    int numClients = 2;
 
-            in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+    public Server(String addr, int port) {
 
-            String m = "";
+        try {
+            InetAddress bindAddress = InetAddress.getByName(addr);
 
-            while(!m.equals("Over")){
+            ServerSocket ss = new ServerSocket(port, 50, bindAddress);
+
+            System.out.println("Server Started " + addr + ":" + port);
+            System.out.println("Waiting for clients");
+
+            for(int i = 0; i < 2; i++) {
                 try{
-                    m = in.readUTF();
-                    System.out.println(m);
-                }
-                catch(IOException i){
-                    System.out.println(i);
+                ProcessBuilder pb = new ProcessBuilder(
+                        "java", "-cp", System.getProperty("java.class.path"), "Client");
+                pb.redirectErrorStream(true);
+                pb.inheritIO();
+
+                Process clientProcess = pb.start();
+                }catch (IOException e) {
+                    System.out.println("Error starting client process: " + e.getMessage());
                 }
             }
-            System.out.println("Closing connection");
 
-            if(in != null) in.close();
-            if(s != null) s.close();
-            if(ss != null) ss.close();
-        }
-        catch(IOException i){
-            System.out.println(i);
+
+            while (true) {
+
+                Socket s = ss.accept();
+
+                System.out.println("New Client accepted: "
+                        + s.getRemoteSocketAddress());
+                        
+
+                ClientHandler client = new ClientHandler(s);
+
+                new Thread(client).start();
+            }
+
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
-    public static void main (String args[]){
-        Server s = new Server(5000);
+
+    public static void broadcast(String message, ClientHandler sender) {
+
+        for (ClientHandler client : clients) {
+
+            if (client != sender) {
+
+                try {
+                    client.send(message);
+
+                } catch (IOException e) {
+                    System.out.println("Could not send message");
+                }
+            }
+        }
+    }
+
+    // Handles each connected client separately
+    static class ClientHandler implements Runnable {
+
+        private Socket s;
+        private DataInputStream in;
+        private DataOutputStream out;
+
+        public ClientHandler(Socket socket) {
+            s = socket;
+        }
+
+        public void run() {
+
+            try {
+                in = new DataInputStream(
+                        new BufferedInputStream(s.getInputStream()));
+
+                out = new DataOutputStream(s.getOutputStream());
+
+                clients.add(this);
+
+                while (true) {
+
+                    String m = in.readUTF();
+
+                    System.out.println("Received: " + m);
+
+                    if (m.equals("Over")) {
+                        break;
+                    }
+
+                    broadcast(m, this);
+                }
+
+            } catch (IOException e) {
+                System.out.println("Client disconnected");
+
+            } finally {
+
+                clients.remove(this);
+
+                try {
+                    if (in != null) in.close();
+                    if (out != null) out.close();
+                    if (s != null) s.close();
+
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+            }
+        }
+
+        public synchronized void send(String message)
+                throws IOException {
+
+            out.writeUTF(message);
+            out.flush();
+        }
+    }
+
+    public static void main(String[] args) {
+        Server s = new Server("127.0.0.1", 5000);
     }
 }
