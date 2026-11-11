@@ -1,19 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="BoardController"
-            prefWidth="700"
-            prefHeight="700">
+<BorderPane prefHeight="700" prefWidth="700" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BoardController">
 
     <center>
-        <GridPane fx:id="boardGrid"
-                  alignment="CENTER"
-                  hgap="0"
-                  vgap="0" />
+        <StackPane>
+            <GridPane fx:id="boardGrid" alignment="CENTER" hgap="0" vgap="0" />
+            <Label fx:id="turnBanner" mouseTransparent="true" style="-fx-background-color: rgba(22, 20, 29, 0.92); -fx-background-radius: 8; -fx-text-fill: white;" text="banner" textFill="#b5b5b5" visible="false" StackPane.alignment="TOP_CENTER">
+                <StackPane.margin>
+                    <Insets top="42" />
+                </StackPane.margin>
+                <padding>
+                    <Insets bottom="8" left="16" right="16" top="8" />
+                </padding>
+                <font>
+                    <Font name="Oriya MN Bold" size="18.0" />
+                </font>
+            </Label>
+        </StackPane>
     </center>
 
+    <bottom>
+        <HBox alignment="CENTER" spacing="12">
+            <padding>
+                <Insets bottom="16" top="4" />
+            </padding>
+            <Label text="Roll Dice:">
+            <font>
+               <Font name="Oriya MN" size="23.0" />
+            </font></Label>
+            <Button fx:id="rollDiceButton" accessibleText="Roll dice" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #fffdf5; -fx-background-radius: 8; -fx-border-color: #68636c; -fx-border-radius: 8; -fx-padding: 0;">
+            <graphic>
+                    <Pane mouseTransparent="true" prefHeight="24" prefWidth="24">
+                        <Circle centerX="5.0" centerY="5" fill="#282532" layoutX="3.0" layoutY="2.0" radius="4.0" />
+                        <Circle centerX="19" centerY="5" fill="#282532" layoutX="13.0" layoutY="2.0" radius="4.0" />
+                        <Circle centerX="12" centerY="12" fill="#282532" layoutX="9.0" layoutY="8.0" radius="4.0" />
+                        <Circle centerX="5" centerY="19" fill="#282532" layoutX="4.0" layoutY="15.0" radius="4.0" />
+                        <Circle centerX="19" centerY="19" fill="#282532" layoutX="13.0" layoutY="15.0" radius="4.0" />
+                    </Pane>
+            </graphic>
+            </Button>
+        </HBox>
+    </bottom>
 </BorderPane>
