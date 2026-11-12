@@ -1,25 +1,18 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.application.Platform;
-
 
 public class Main extends Application {
 
-    // the dice is rolled once at the start of every turn.
-    private static final diceCycle1 dice = new diceCycle1();
+    private final diceCycle2 dice = new diceCycle2();
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        FXMLLoader loader = new FXMLLoader(
-            Main.class.getResource("/Board.fxml")
-        );
-
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/Board.fxml"));
         Parent root = loader.load();
-
         BoardController controller = loader.getController();
 
         Client[] clientHolder = new Client[1];
@@ -117,14 +110,12 @@ public class Main extends Application {
 
         });
 
-        stage.setTitle("Minotaur's Maze");
         stage.setScene(scene);
         stage.setResizable(false);
 
         //rollForTurn(controller);          // player 1's opening roll
         updateTitle(stage, controller);
         stage.show();
-
         root.requestFocus();
     }
 
@@ -154,16 +145,48 @@ public class Main extends Application {
         controller.setMovesLeft(dice.getSum());
     }
 
-    // window title: player's turn, the roll, and moves left - or the winner.
-    private static void updateTitle(Stage stage, BoardController controller) {
+    private void rollForTurn(Stage stage, BoardController controller) {
+        if (dice.hasRolled() || controller.isGameOver()) {
+            return;
+        }
+
+        dice.roll();
+        controller.setRollAvailable(false);
+        int a = dice.getValueA();
+        int b = dice.getValueB();
+        controller.showRoll(face(a), face(b));
+        if (dice.bothStars()) {
+            int skippedPlayer = controller.getCurrentPlayer();
+            controller.advanceTurn();
+            prepareTurn(stage, controller);
+            controller.showBanner("Player " + skippedPlayer + " rolled double stars! Turn skipped!");
+            return;
+        }
+        int moves = Math.max(0, a) + Math.max(0, b);
+        int shifts = Math.max(0, -a) + Math.max(0, -b);
+        controller.beginTurn(moves, shifts);
+        if (!controller.isTurnComplete()) {
+            updateTitle(stage, controller);
+        }
+        
+    }
+
+    private static String face(int value) {
+        return diceCycle2.isStar(value) ? "*".repeat(-value) : Integer.toString(value);
+    }
+
+    private void updateTitle(Stage stage, BoardController controller) {
+        String title = "Minotaur's Maze - Player " + controller.getCurrentPlayer();
         if (controller.isGameOver()) {
-            stage.setTitle("Minotaur's Maze - Player "
-                    + controller.getCurrentPlayer() + " wins!");
+            controller.showWin();
+            stage.setTitle(title + " wins!");
+        } else if (!dice.hasRolled()) {
+            stage.setTitle(title + "'s turn | Roll the dice");
         } else {
-            stage.setTitle("Minotaur's Maze - Player "
-                    + controller.getCurrentPlayer() + "'s turn | Rolled "
-                    + dice.getValueA() + " + " + dice.getValueB()
-                    + " | Moves left: " + controller.getMovesLeft());
+            stage.setTitle(title + "'s turn | Rolled "
+                    + face(dice.getValueA()) + " + " + face(dice.getValueB())
+                    + " | Moves left: " + controller.getMovesLeft()
+                    + " | Shifts left: " + controller.getShiftsLeft());
         }
     }
 
