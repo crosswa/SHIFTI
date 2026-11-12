@@ -1,0 +1,24 @@
+Nov 12, 2026 4:53:27 PM com.sun.javafx.application.PlatformImpl startup
+WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed module @66a29884'
+Nov 12, 2026 4:53:27 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 26 by JavaFX runtime of version 21.0.2
+PASS TC-04 Water blocks movement
+PASS TC-05 Playable edge blocks movement
+PASS TC-10 Capture moves the opponent's sprite and shows a banner
+Nov 12, 2026 4:53:27 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 26 by JavaFX runtime of version 21.0.2
+java.net.SocketException: Operation not permitted
+PASS TC-01 Board geometry and playable opening route
+PASS TC-02 Both sprites start at their door entrances
+PASS TC-03 Manual roll starts the turn
+PASS TC-06 Non-arrow keys are ignored during movement
+PASS TC-07 Legal arrow-key step moves the active sprite
+PASS TC-08 A step deducts one move
+PASS TC-09 Last move passes the turn and re-enables the die
+PASS TC-11 Star roll enables shifting and spends the shift on click
+PASS TC-12 Two star faces pass the turn
+Nov 12, 2026 4:53:28 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 26 by JavaFX runtime of version 21.0.2
+java.net.SocketException: Operation not permitted
+PASS TC-13 Full game reaches the goal, displays a win, and stops movement
+13/13 gameplay checks passed.

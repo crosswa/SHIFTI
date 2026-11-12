@@ -1,0 +1,8 @@
+PASS Different squares do not match
+PASS No capture on separate squares
+PASS A piece cannot capture itself
+PASS Matching coordinates share a square
+PASS A capture is reported
+PASS Captured piece returns to its start
+PASS Capturing piece stays where it landed
+7/7 capture checks passed.
