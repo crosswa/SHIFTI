@@ -42,12 +42,22 @@ public class Client {
         }
     }
 
-    // Send movement to server
-    public void sendMove(int player, int row, int col) {
+    public void sendMessage(String message) {
+        try {
+            out.writeUTF(message);
+            out.flush();
+            System.out.println("Sent: " + message);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+
+    // Send message to server
+    public void sendMove(String message) {
 
         try {
-            out.writeUTF("MOVE|" + player + "|" + row + "|" + col);
-            System.out.println("Sent: MOVE|" + player + "|" + row + "|" + col);
+            out.writeUTF(message);
             out.flush();
 
         } catch (IOException e) {
@@ -56,11 +66,6 @@ public class Client {
     }
 
     public static void main(String[] args) {
-
-        Client c = new Client("127.0.0.1", 5000, message -> {
-            System.out.println("Received: " + message);
-        });
-
         javafx.application.Application.launch(Main.class, args);
     }
 }

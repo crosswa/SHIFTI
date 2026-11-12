@@ -389,9 +389,6 @@ public class BoardController {
         // legal move: store it on the piece and use up one move.
         piece.moveTo(newRow, newCol);
         movesLeft--;
-        if(client != null) {
-            client.sendMove(currentPlayer, newRow, newCol);
-        }
  
         if (piece.isWin(currentPlayer)) {
             gameOver = true;
@@ -445,8 +442,22 @@ public class BoardController {
         this.client = client;
     }
 
+    public void receiveState(
+        int p1row, int p1col,
+        int p2row, int p2col,
+        int player, int moves,
+        int dieA, int dieB) {
+        pieces[0].moveTo(p1row, p1col);
+        pieces[1].moveTo(p2row, p2col);
 
-    public void recieveMove(int player, int row, int col) {
+        currentPlayer = player;
+        movesLeft = moves;
+
+        drawBoard();
+    }
+
+    public void receiveMove(int player, int row, int col) {
+        System.out.println("Recieved move for player " + player + ": " + row + ", " + col);
         if (player < 1 || player > 2) {
             return;
         }

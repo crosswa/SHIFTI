@@ -143,6 +143,12 @@ public class diceCycle1 {
         }
     }
 
+    public void setValues(int a, int b) {
+        valueA = a;
+        valueB = b;
+        rolled = true;
+    }
+
     //test
     public static void main(String[] args) {
         diceCycle1 dice = new diceCycle1();
