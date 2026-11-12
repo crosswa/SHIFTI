@@ -42,11 +42,12 @@ public class Client {
         }
     }
 
-    // Send movement to server
-    public void sendMove(String move) {
+      // Send movement to server
+    public void sendMove(int player, int row, int col) {
 
         try {
-            out.writeUTF("MOVE|" + move);
+            out.writeUTF("MOVE|" + player + "|" + row + "|" + col);
+            System.out.println("Sent: MOVE|" + player + "|" + row + "|" + col);
             out.flush();
 
         } catch (IOException e) {

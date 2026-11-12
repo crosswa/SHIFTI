@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,18 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/Board.fxml"));
         Parent root = loader.load();
         BoardController controller = loader.getController();
+
+        Client client = new Client("127.0.0.1", 5000, message -> {
+            Platform.runLater(() -> {
+                String[] data = message.split("\\|");
+                if(data[0].equals("MOVE")){
+                    int player = Integer.parseInt(data[1]);
+                    int row = Integer.parseInt(data[2]);
+                    int col = Integer.parseInt(data[3]);
+                    controller.recieveMove(player, row, col);
+                }
+            });
+        });
 
         Scene scene = new Scene(root);
         scene.setOnKeyPressed(event -> controller.handleKey(event.getCode()));

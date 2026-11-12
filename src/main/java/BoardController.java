@@ -38,7 +38,6 @@ public class BoardController {
     private final ImageView[] sprites = new ImageView[pieces.length];
 
     private int currentPlayer = 1;
-    private int oppPlayer;
     private boolean gameOver;
     private int movesLeft;
     private int shiftsLeft;
@@ -225,6 +224,9 @@ public class BoardController {
 
         piece.moveTo(newRow, newCol);
         movesLeft--;
+        if(client != null) {
+            client.sendMove(currentPlayer, newRow, newCol);
+        }
 
         boolean captured = false;
         if (piece.isWin(currentPlayer)) {
@@ -333,5 +335,23 @@ public class BoardController {
 
     public int[] getPlayer2Position() {
         return new int[]{pieces[1].getRow(), pieces[1].getCol()};
+    }
+
+    // ** NETWORKING **
+
+    private Client client;
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+
+    public void recieveMove(int player, int row, int col) {
+        if (player < 1 || player > 2) {
+            return;
+        }
+        Piece piece = pieces[player - 1];
+        piece.moveTo(row, col);
+
+        drawBoard();
     }
 }
